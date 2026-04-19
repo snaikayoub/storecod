@@ -5,6 +5,8 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{% block title %}StorePHP{% endblock %}</title>
+    <link rel="icon" type="image/svg+xml" href="{{ asset('favicon.svg') }}" />
+    <link rel="alternate" type="application/xml" title="Sitemap" href="{{ asset('sitemap.xml') }}" />
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300..900&family=Space+Grotesk:wght@300..700&display=swap" rel="stylesheet">
@@ -28,6 +30,10 @@
             {% if is_granted('ROLE_ADMIN') %}
               <a class="text-sm font-bold text-slate-700 hover:text-slate-900" href="{{ path('admin') }}">Admin</a>
               <a class="text-sm font-bold text-slate-700 hover:text-slate-900" href="{{ path('app_logout') }}">{{ isRtl ? 'خروج' : 'Logout' }}</a>
+            {% elseif app.user %}
+              <a class="text-sm font-bold text-slate-700 hover:text-slate-900" href="{{ path('app_logout') }}">{{ isRtl ? 'خروج' : 'Logout' }}</a>
+            {% else %}
+              <a class="text-sm font-bold text-slate-700 hover:text-slate-900" href="{{ path('app_login') }}">{{ isRtl ? 'دخول' : 'Login' }}</a>
             {% endif %}
 
             <div class="h-5 w-px bg-slate-200"></div>

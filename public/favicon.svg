@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-label="StorePHP">
+  <defs>
+    <linearGradient id="g" x1="0" x2="1" y1="0" y2="1">
+      <stop offset="0%" stop-color="#06b6d4"/>
+      <stop offset="50%" stop-color="#10b981"/>
+      <stop offset="100%" stop-color="#f59e0b"/>
+    </linearGradient>
+  </defs>
+  <rect width="128" height="128" rx="28" fill="#ffffff"/>
+  <path d="M30 88V40h18c17 0 28 8 28 23S65 88 48 88H30zm16-13c8 0 13-4 13-12s-5-11-13-11h-1v23h1z" fill="url(#g)"/>
+  <path d="M74 88V40h15v35h19v13H74z" fill="#0f172a"/>
+</svg>
