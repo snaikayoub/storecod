@@ -31,18 +31,22 @@ class SeedCommand extends Command
         $userRepo = $this->em->getRepository(User::class);
         $productRepo = $this->em->getRepository(Product::class);
 
-        $adminEmail = 'admin@storecod.local';
-        /** @var User|null $admin */
-        $admin = $userRepo->findOneBy(['email' => $adminEmail]);
-        if (!$admin) {
-            $admin = (new User())
-                ->setEmail($adminEmail)
-                ->setRoles(['ROLE_ADMIN']);
-            $admin->setPassword($this->passwordHasher->hashPassword($admin, 'cod'));
-            $this->em->persist($admin);
-            $output->writeln('Created admin user: ' . $adminEmail);
+        $adminEmail = trim((string) ($_ENV['SEED_ADMIN_EMAIL'] ?? $_SERVER['SEED_ADMIN_EMAIL'] ?? ''));
+        $adminPassword = trim((string) ($_ENV['SEED_ADMIN_PASSWORD'] ?? $_SERVER['SEED_ADMIN_PASSWORD'] ?? ''));
+        if ($adminEmail !== '' && $adminPassword !== '') {
+            /** @var User|null $admin */
+            $admin = $userRepo->findOneBy(['email' => $adminEmail]);
+            if (!$admin) {
+                $admin = (new User())
+                    ->setEmail($adminEmail)
+                    ->setRoles(['ROLE_ADMIN']);
+                $this->em->persist($admin);
+            }
+
+            $admin->setPassword($this->passwordHasher->hashPassword($admin, $adminPassword));
+            $output->writeln('Seeded admin user: ' . $adminEmail);
         } else {
-            $output->writeln('Admin user already exists: ' . $adminEmail);
+            $output->writeln('Skipping admin user seed (set SEED_ADMIN_EMAIL and SEED_ADMIN_PASSWORD).');
         }
 
         $existingProducts = (int) $productRepo->count([]);
