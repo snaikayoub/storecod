@@ -1,0 +1,83 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Panier - StorePHP{% endblock %}
+
+{% block body %}
+  <div class="pagehead">
+    <h1>Panier</h1>
+    <p class="muted">Vos articles pour la commande.</p>
+  </div>
+
+  {% for message in app.flashes('success') %}
+    <div class="notice">{{ message }}</div>
+  {% endfor %}
+  {% for message in app.flashes('error') %}
+    <div class="notice notice--error">{{ message }}</div>
+  {% endfor %}
+
+  {% if lines is empty %}
+    <div class="card">
+      <p class="muted">Votre panier est vide.</p>
+      <div class="hero__actions">
+        <a class="btn btn--primary" href="{{ path('shop') }}">Retour boutique</a>
+      </div>
+    </div>
+  {% else %}
+    <div class="card">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Produit</th>
+            <th>Variante</th>
+            <th>Qte</th>
+            <th>Total</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for l in lines %}
+            <tr>
+              <td>
+                <a href="{{ path('product_show', { slug: l.product.slug }) }}">{{ l.product.title }}</a>
+              </td>
+              <td class="muted">{{ l.variant ?? '—' }}</td>
+              <td>{{ l.qty }}</td>
+              <td><strong>{{ (l.lineTotalCents / 100)|number_format(2, '.', ' ') }} DH</strong></td>
+              <td>
+                <div class="qty">
+                  <form method="post" action="{{ path('cart_dec', { id: l.product.id }) }}">
+                    <input type="hidden" name="_token" value="{{ csrf_token('cart_dec_' ~ l.product.id) }}" />
+                    {% if l.variant %}<input type="hidden" name="variant" value="{{ l.variant }}" />{% endif %}
+                    <button class="btn" type="submit">-</button>
+                  </form>
+
+                  <form method="post" action="{{ path('cart_inc', { id: l.product.id }) }}">
+                    <input type="hidden" name="_token" value="{{ csrf_token('cart_inc_' ~ l.product.id) }}" />
+                    {% if l.variant %}<input type="hidden" name="variant" value="{{ l.variant }}" />{% endif %}
+                    <button class="btn" type="submit">+</button>
+                  </form>
+                </div>
+
+                <form method="post" action="{{ path('cart_remove', { id: l.product.id }) }}">
+                  <input type="hidden" name="_token" value="{{ csrf_token('cart_remove_' ~ l.product.id) }}" />
+                  {% if l.variant %}<input type="hidden" name="variant" value="{{ l.variant }}" />{% endif %}
+                  <button class="btn" type="submit">Retirer</button>
+                </form>
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+
+      <div class="cart__foot">
+        <div class="muted">Total</div>
+        <div class="cart__total">{{ (totalCents / 100)|number_format(2, '.', ' ') }} DH</div>
+      </div>
+
+      <div class="hero__actions">
+        <a class="btn" href="{{ path('shop') }}">Continuer achats</a>
+        <a class="btn btn--primary" href="{{ path('checkout') }}">Checkout</a>
+      </div>
+    </div>
+  {% endif %}
+{% endblock %}

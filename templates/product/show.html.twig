@@ -1,0 +1,405 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ product.title }} - StorePHP{% endblock %}
+
+{% block body %}
+  {% set isRtl = app.request.locale starts with 'ar' %}
+  {% set t_product = isRtl ? 'المنتج' : 'Produit' %}
+  {% set t_price = isRtl ? 'السعر' : 'Prix' %}
+  {% set t_payment = isRtl ? 'الدفع' : 'Paiement' %}
+  {% set t_order = isRtl ? 'اطلب الآن' : 'Commander' %}
+  {% set t_description = isRtl ? 'الوصف' : 'Description' %}
+  {% set t_size = isRtl ? 'المقاس' : 'Taille' %}
+  {% set t_color = isRtl ? 'اللون' : 'Couleur' %}
+  {% set t_name = isRtl ? 'الاسم' : 'Nom' %}
+  {% set t_phone = isRtl ? 'الهاتف' : 'Telephone' %}
+  {% set t_city = isRtl ? 'المدينة' : 'Ville' %}
+  {% set t_address = isRtl ? 'العنوان' : 'Adresse' %}
+  {% set t_qty = isRtl ? 'الكمية' : 'Quantite' %}
+  {% set t_note = isRtl ? 'ملاحظة (اختياري)' : 'Commentaire (optionnel)' %}
+  {% set t_confirm = isRtl ? 'تأكيد الطلب' : 'Valider la commande' %}
+  {% set t_picked = isRtl ? 'الاختيار' : 'Variante' %}
+  {% set t_only_cod = isRtl ? 'الدفع عند الاستلام فقط.' : 'Paiement a la livraison uniquement.' %}
+  {% set t_video = isRtl ? 'فيديو' : 'Video' %}
+
+  {% for message in app.flashes('error') %}
+    <div class="mb-4 rounded-2xl border border-red-200 bg-red-50/70 px-4 py-3 text-sm font-semibold text-red-800">
+      {{ message }}
+    </div>
+  {% endfor %}
+
+  {% set gallery = [] %}
+  {% if medias is defined and medias|length > 0 %}
+    {% for m in medias %}
+      {% set gallery = gallery|merge([m]) %}
+    {% endfor %}
+  {% else %}
+    {% for url in images %}
+      {% set gallery = gallery|merge([{'kind':'image','url':url}]) %}
+    {% endfor %}
+  {% endif %}
+
+  {# pick an image URL for fallbacks (avoid using video URL) #}
+  {% set firstImageUrl = '' %}
+  {% for item in gallery %}
+    {% set isVideo = item.kind is defined and item.kind == 'video' %}
+    {% if not isVideo and firstImageUrl == '' %}
+      {% set firstImageUrl = item.url %}
+    {% endif %}
+  {% endfor %}
+  {% if firstImageUrl == '' and (gallery[0] ?? null) %}
+    {% set firstImageUrl = (gallery[0]).url %}
+  {% endif %}
+
+  <section class="relative overflow-hidden">
+    <div aria-hidden="true" class="pointer-events-none absolute inset-0">
+      <div class="absolute -top-28 left-[-8rem] h-80 w-80 rounded-full bg-cyan-400/15 blur-3xl"></div>
+      <div class="absolute -top-16 right-[-10rem] h-96 w-96 rounded-full bg-emerald-400/12 blur-3xl"></div>
+      <div class="absolute -bottom-40 left-1/3 h-[28rem] w-[28rem] rounded-full bg-amber-300/10 blur-3xl"></div>
+    </div>
+
+    <div class="relative">
+      <div class="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+        <div class="max-w-3xl {{ isRtl ? 'text-right' : '' }}">
+          <div class="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white/70 px-3 py-1 text-xs font-black tracking-wider text-slate-700 backdrop-blur">
+            <span class="h-1.5 w-1.5 rounded-full bg-cyan-500 shadow-[0_0_0_4px_rgba(34,211,238,0.15)]"></span>
+            {{ t_product }}
+            {% if product.category %}
+              <span class="text-slate-400">/</span>
+              <span class="text-slate-900">{{ product.category }}</span>
+            {% endif %}
+          </div>
+
+          <h1 class="mt-3 text-3xl font-black tracking-tight text-slate-900 sm:text-4xl">
+            {{ product.title }}
+          </h1>
+
+          <p class="mt-2 text-sm font-semibold text-slate-600">
+            {{ isRtl ? 'تصميم مستقبلي. توصيل سريع. دفع عند الاستلام.' : 'Futuriste, propre, et rapide. Paiement a la livraison.' }}
+          </p>
+        </div>
+
+        <a href="#order" class="inline-flex items-center justify-center rounded-2xl border border-slate-200 bg-white/70 px-4 py-3 text-sm font-black text-slate-900 shadow-sm backdrop-blur transition hover:border-cyan-300 hover:shadow-[0_12px_30px_rgba(2,132,199,0.12)]">
+          {{ t_order }}
+          <span class="{{ isRtl ? 'mr-2' : 'ml-2' }} inline-flex h-6 w-6 items-center justify-center rounded-full bg-cyan-500/15 text-cyan-700">↓</span>
+        </a>
+      </div>
+
+      <div class="mt-6 grid grid-cols-1 gap-6 lg:grid-cols-12">
+        <div class="lg:col-span-12">
+          <div class="rounded-3xl border border-slate-200/80 bg-white/60 p-3 shadow-[0_18px_50px_rgba(15,23,42,0.08)] backdrop-blur">
+            <div class="grid grid-cols-1 gap-3 md:grid-cols-2 md:items-start">
+              <div class="overflow-hidden rounded-2xl bg-slate-50" id="lpMain">
+                {% set first = gallery[0] ?? null %}
+              {% if first %}
+                {% if first.kind is defined and first.kind == 'video' %}
+                  {% set v = first.url %}
+                  {% if 'youtube.com' in v or 'youtu.be' in v %}
+                    {% set src = v|replace({'watch?v=':'embed/','youtu.be/':'youtube.com/embed/'}) %}
+                    {% set src = src ~ ('?' in src ? '&' : '?') ~ 'autoplay=1&mute=1&playsinline=1' %}
+                    <iframe class="block w-full bg-black" style="aspect-ratio: 16 / 9" src="{{ src }}" title="{{ t_video }}" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                  {% else %}
+                    <video class="block w-full bg-black" style="aspect-ratio: 16 / 9" src="{{ v }}" autoplay muted controls playsinline></video>
+                  {% endif %}
+                {% else %}
+                  <img class="block w-full object-contain" style="aspect-ratio: 1 / 1" src="{{ first.url }}" alt="{{ product.title }}" />
+                {% endif %}
+              {% else %}
+                  <div class="grid place-items-center text-slate-500" style="aspect-ratio: 1 / 1">
+                    <div class="text-sm font-bold">{{ isRtl ? 'لا توجد صور بعد' : 'Aucune image' }}</div>
+                  </div>
+                {% endif %}
+              </div>
+
+              {% if gallery|length > 1 %}
+                <div class="rounded-2xl border border-slate-200 bg-white/70 p-2 shadow-sm">
+                  <div class="flex flex-wrap content-start gap-2 overflow-y-auto pr-1" style="max-height: 520px">
+                    {% for item in gallery %}
+                      {% set isVideo = item.kind is defined and item.kind == 'video' %}
+                      <button class="group relative h-24 w-24 shrink-0 overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm transition hover:border-cyan-300 focus:outline-none focus:ring-2 focus:ring-cyan-400/40 sm:h-28 sm:w-28" type="button" data-kind="{{ isVideo ? 'video' : 'image' }}" data-url="{{ item.url }}" onclick="window.__storeLpSwap && window.__storeLpSwap(this)">
+                        {% if isVideo %}
+                          <div class="grid h-full w-full place-items-center bg-gradient-to-b from-slate-900 to-slate-800 text-white">
+                            <div class="grid place-items-center gap-1">
+                              <span class="inline-flex h-10 w-10 items-center justify-center rounded-full bg-white/10 ring-1 ring-white/15 transition group-hover:bg-white/15">
+                                <svg viewBox="0 0 24 24" class="h-5 w-5" fill="currentColor" aria-hidden="true">
+                                  <path d="M8 5v14l11-7z"></path>
+                                </svg>
+                              </span>
+                              <span class="text-[11px] font-black tracking-wider text-white/80">{{ t_video }}</span>
+                            </div>
+                          </div>
+                        {% else %}
+                          <div class="h-full w-full p-1">
+                            <img class="block h-full w-full rounded-xl object-contain" src="{{ item.url }}" alt="" loading="lazy" />
+                          </div>
+                        {% endif %}
+                      </button>
+                    {% endfor %}
+                  </div>
+                </div>
+              {% endif %}
+            </div>
+          </div>
+
+          <div class="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-2">
+            <div class="rounded-3xl border border-slate-200 bg-white/60 px-4 py-4 backdrop-blur">
+              <div class="text-xs font-black tracking-wider text-slate-500">{{ isRtl ? 'الدفع' : 'PAIEMENT' }}</div>
+              <div class="mt-1 text-sm font-extrabold text-slate-900">{{ isRtl ? 'عند الاستلام' : 'A la livraison' }}</div>
+            </div>
+            <div class="rounded-3xl border border-slate-200 bg-white/60 px-4 py-4 backdrop-blur">
+              <div class="text-xs font-black tracking-wider text-slate-500">{{ isRtl ? 'الدعم' : 'SUPPORT' }}</div>
+              <div class="mt-1 text-sm font-extrabold text-slate-900">{{ isRtl ? 'تأكيد سريع بالهاتف' : 'Confirmation rapide' }}</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="lg:col-span-12">
+          <div class="flex flex-col gap-6 lg:flex-row lg:items-start">
+            <div class="min-w-0 flex-1">
+              <div class="rounded-3xl border border-slate-200/80 bg-white/60 p-5 shadow-sm backdrop-blur">
+                <div class="flex items-center justify-between gap-3">
+                  <h2 class="text-base font-black tracking-tight text-slate-900 {{ isRtl ? 'text-right' : '' }}">{{ t_description }}</h2>
+                  <span class="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white/70 px-3 py-1 text-xs font-black text-slate-700">
+                    <span class="h-1.5 w-1.5 rounded-full bg-emerald-500"></span>
+                    {{ isRtl ? 'أصلي' : 'Original' }}
+                  </span>
+                </div>
+
+                {% set d = product.getDescriptionForLocale(app.request.locale) %}
+                {% if '<' in d %}
+                  <div class="richtext mt-4 text-slate-700">{{ d|raw }}</div>
+                {% else %}
+                  <div class="mt-4 text-sm font-medium leading-relaxed text-slate-700">{{ d|e|nl2br }}</div>
+                {% endif %}
+              </div>
+            </div>
+
+            <div class="w-full shrink-0 lg:w-[520px] xl:w-[560px]">
+              <div class="space-y-4 lg:sticky lg:top-24">
+                <div id="order" class="min-w-0 rounded-3xl border border-slate-200/80 bg-white/70 p-4 shadow-[0_18px_55px_rgba(15,23,42,0.10)] backdrop-blur">
+                  <div class="flex items-start justify-between gap-3">
+                    <div class="{{ isRtl ? 'text-right' : '' }}">
+                      <div class="text-xs font-black tracking-wider text-slate-500">{{ t_price }}</div>
+                      {% set baseCents = product.priceBaseCents ?? 0 %}
+                      {% set saleCents = product.priceSaleCents ?? 0 %}
+                      <div class="mt-1 flex items-baseline gap-3">
+                        {% if baseCents > 0 and baseCents > saleCents %}
+                          <div class="text-sm font-black text-red-600 line-through decoration-red-500 decoration-2">
+                            {{ (baseCents / 100)|number_format(0, '.', ' ') }} Dhs
+                          </div>
+                        {% endif %}
+                        <div class="text-2xl font-black tracking-tight text-emerald-700">
+                          {{ (saleCents / 100)|number_format(0, '.', ' ') }} <span class="text-base font-extrabold text-slate-500">Dhs</span>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="inline-flex items-center gap-2 rounded-full border border-amber-200 bg-amber-50/70 px-3 py-1 text-xs font-black tracking-wider text-amber-800">
+                      <span class="h-1.5 w-1.5 rounded-full bg-amber-500"></span>
+                      COD
+                    </div>
+                  </div>
+
+              <form method="post" action="{{ path('order_create', { id: product.id }) }}" class="mt-4 grid min-w-0 gap-3" id="orderForm">
+                <input type="hidden" name="_token" value="{{ csrf_token('order_create_' ~ product.id) }}" />
+
+                {% if variants is defined and variants|length > 0 %}
+                  {% set variantData = [] %}
+                  {% for v in variants %}
+                    {% set parts = v.label|split(' ') %}
+                    {% set size = parts[0] ?? v.label %}
+                    {% set color = parts|slice(1)|join(' ') %}
+                    {% if color == '' %}{% set color = '-' %}{% endif %}
+                    {% set variantData = variantData|merge([{
+                      id: v.id,
+                      label: v.label,
+                      size: size,
+                      color: color,
+                      active: v.active,
+                      stock: v.stock
+                    }]) %}
+                  {% endfor %}
+
+                  <input type="hidden" name="variantId" value="" id="variantIdInput" />
+
+                  <div class="grid min-w-0 grid-cols-2 gap-3">
+                    <label class="grid gap-1">
+                      <span class="text-xs font-black tracking-wider text-slate-600">{{ t_size }}</span>
+                      <select class="w-full rounded-2xl border border-slate-200 bg-white/70 px-3 py-2.5 text-sm font-bold text-slate-900 shadow-sm focus:outline-none focus:ring-2 focus:ring-cyan-400/35" id="sizeSelect"></select>
+                    </label>
+                    <label class="grid gap-1">
+                      <span class="text-xs font-black tracking-wider text-slate-600">{{ t_color }}</span>
+                      <select class="w-full rounded-2xl border border-slate-200 bg-white/70 px-3 py-2.5 text-sm font-bold text-slate-900 shadow-sm focus:outline-none focus:ring-2 focus:ring-cyan-400/35" id="colorSelect"></select>
+                    </label>
+                  </div>
+
+                  <script>
+                    window.__storeVariants = {{ variantData|json_encode|raw }};
+                  </script>
+                {% endif %}
+
+                <label class="grid gap-1">
+                  <span class="text-xs font-black tracking-wider text-slate-600">{{ t_name }}</span>
+                  <input class="w-full rounded-2xl border border-slate-200 bg-white/70 px-3 py-2.5 text-sm font-bold text-slate-900 shadow-sm placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-cyan-400/35" type="text" name="name" required />
+                </label>
+
+                <label class="grid gap-1">
+                  <span class="text-xs font-black tracking-wider text-slate-600">{{ t_phone }}</span>
+                  <input class="w-full rounded-2xl border border-slate-200 bg-white/70 px-3 py-2.5 text-sm font-bold text-slate-900 shadow-sm placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-cyan-400/35" type="text" name="phone" required />
+                </label>
+
+                <label class="grid gap-1">
+                  <span class="text-xs font-black tracking-wider text-slate-600">Email (optionnel)</span>
+                  <input class="w-full rounded-2xl border border-slate-200 bg-white/70 px-3 py-2.5 text-sm font-bold text-slate-900 shadow-sm placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-cyan-400/35" type="email" name="email" />
+                </label>
+
+                <label class="grid gap-1">
+                  <span class="text-xs font-black tracking-wider text-slate-600">{{ t_city }}</span>
+                  <input class="w-full rounded-2xl border border-slate-200 bg-white/70 px-3 py-2.5 text-sm font-bold text-slate-900 shadow-sm placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-cyan-400/35" type="text" name="city" required />
+                </label>
+
+                <label class="grid gap-1">
+                  <span class="text-xs font-black tracking-wider text-slate-600">{{ t_address }}</span>
+                  <textarea class="w-full resize-y rounded-2xl border border-slate-200 bg-white/70 px-3 py-2.5 text-sm font-bold text-slate-900 shadow-sm placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-cyan-400/35" style="max-height: 140px" name="address" rows="2" required></textarea>
+                </label>
+
+                <div class="grid min-w-0 grid-cols-[140px_1fr] items-end gap-3">
+                  <label class="grid gap-1">
+                    <span class="text-xs font-black tracking-wider text-slate-600">{{ t_qty }}</span>
+                    <input class="h-11 w-full rounded-2xl border border-slate-200 bg-white/70 px-3 py-0 text-sm font-bold text-slate-900 shadow-sm focus:outline-none focus:ring-2 focus:ring-cyan-400/35" type="number" name="qty" min="1" max="20" value="1" />
+                  </label>
+
+                  <div class="flex justify-center">
+                    <button class="inline-flex h-11 w-full max-w-[360px] items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-cyan-600 via-emerald-600 to-amber-500 px-4 text-sm font-black tracking-wide text-white shadow-[0_18px_40px_rgba(6,182,212,0.20)] transition hover:brightness-[0.98] focus:outline-none focus:ring-2 focus:ring-cyan-400/40" type="submit">
+                      {{ t_confirm }}
+                      <span class="inline-flex h-7 w-7 items-center justify-center rounded-full bg-white/15 ring-1 ring-white/20">{{ isRtl ? '←' : '→' }}</span>
+                    </button>
+                  </div>
+                </div>
+
+                <div class="text-xs font-bold text-slate-600">{{ t_only_cod }}</div>
+              </form>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <script>
+    window.__storeLpSwap = function(btn) {
+      var kind = btn.getAttribute('data-kind');
+      var url = btn.getAttribute('data-url');
+      var main = document.getElementById('lpMain');
+      if (!main) return;
+      main.innerHTML = '';
+
+      if (kind === 'video') {
+        var isYoutube = (url.indexOf('youtube.com') !== -1) || (url.indexOf('youtu.be') !== -1);
+        if (isYoutube) {
+          var src = url.replace('watch?v=', 'embed/').replace('youtu.be/', 'youtube.com/embed/');
+          src = src + (src.indexOf('?') !== -1 ? '&' : '?') + 'autoplay=1&mute=1&playsinline=1';
+          var iframe = document.createElement('iframe');
+          iframe.className = 'block w-full bg-black';
+          iframe.style.aspectRatio = '16 / 9';
+          iframe.src = src;
+          iframe.title = 'Video';
+          iframe.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture';
+          iframe.allowFullscreen = true;
+          main.appendChild(iframe);
+        } else {
+          var video = document.createElement('video');
+          video.className = 'block w-full bg-black';
+          video.style.aspectRatio = '16 / 9';
+          video.src = url;
+          video.autoplay = true;
+          video.muted = true;
+          video.controls = true;
+          video.playsInline = true;
+          main.appendChild(video);
+        }
+      } else {
+        var img = document.createElement('img');
+        img.className = 'block w-full object-contain';
+        img.style.aspectRatio = '1 / 1';
+        img.src = url;
+        img.alt = '';
+        main.appendChild(img);
+      }
+    };
+
+    (function() {
+      var data = window.__storeVariants || [];
+      var sizeSel = document.getElementById('sizeSelect');
+      var colorSel = document.getElementById('colorSelect');
+      var hidden = document.getElementById('variantIdInput');
+      if (!Array.isArray(data) || data.length === 0) return;
+      if (!sizeSel || !colorSel || !hidden) return;
+
+      function uniq(arr) {
+        var out = [];
+        for (var i = 0; i < arr.length; i++) {
+          if (out.indexOf(arr[i]) === -1) out.push(arr[i]);
+        }
+        return out;
+      }
+
+      function availableForSize(size) {
+        return data.filter(function(v) {
+          return v.size === size && v.active && (v.stock > 0);
+        });
+      }
+
+      function setOptions(select, values) {
+        select.innerHTML = '';
+        for (var i = 0; i < values.length; i++) {
+          var opt = document.createElement('option');
+          opt.value = values[i];
+          opt.textContent = values[i];
+          select.appendChild(opt);
+        }
+      }
+
+      var sizes = uniq(data.map(function(v) { return v.size; }));
+      setOptions(sizeSel, sizes);
+
+      function syncColors() {
+        var size = sizeSel.value;
+        var avail = availableForSize(size);
+        var colors = uniq(avail.map(function(v) { return v.color; }));
+        if (colors.length === 0) {
+          colors = uniq(data.filter(function(v) { return v.size === size; }).map(function(v) { return v.color; }));
+        }
+        setOptions(colorSel, colors);
+      }
+
+      function pickVariant() {
+        var size = sizeSel.value;
+        var color = colorSel.value;
+        var v = data.find(function(x) {
+          return x.size === size && x.color === color && x.active && (x.stock > 0);
+        });
+        if (!v) {
+          v = data.find(function(x) { return x.size === size && x.color === color; });
+        }
+        if (v) {
+          hidden.value = String(v.id);
+        } else {
+          hidden.value = '';
+        }
+      }
+
+      syncColors();
+      pickVariant();
+
+      sizeSel.addEventListener('change', function() {
+        syncColors();
+        pickVariant();
+      });
+      colorSel.addEventListener('change', function() {
+        pickVariant();
+      });
+    })();
+  </script>
+{% endblock %}

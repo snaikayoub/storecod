@@ -1,0 +1,18 @@
+{# Renders a thumbnail when the value looks like an image URL/path #}
+{% set v = field.value ?? '' %}
+{% if v is not empty %}
+  {% set lower = v|lower %}
+  {% set is_image = ('.jpg' in lower) or ('.jpeg' in lower) or ('.png' in lower) or ('.webp' in lower) or ('/uploads/' in lower) %}
+  {% if is_image %}
+    <a href="{{ v|e('html_attr') }}" target="_blank" rel="noreferrer">
+      <img
+        src="{{ v|e('html_attr') }}"
+        alt="thumb"
+        style="width:44px;height:44px;object-fit:cover;border-radius:8px;border:1px solid #d1d5db;"
+        loading="lazy"
+      />
+    </a>
+  {% else %}
+    <a href="{{ v|e('html_attr') }}" target="_blank" rel="noreferrer">Lien</a>
+  {% endif %}
+{% endif %}

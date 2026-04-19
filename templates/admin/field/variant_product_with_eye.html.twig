@@ -1,0 +1,17 @@
+{# Shows variant's product title with a view (eye) link #}
+{% set slug = entity.instance.productSlug ?? '' %}
+
+<span>
+  {{ field.value }}
+  {% if slug is not empty %}
+    <a
+      href="{{ path('product_show', { slug: slug }) }}"
+      target="_blank"
+      rel="noreferrer"
+      title="Voir sur la boutique"
+      style="margin-left:8px;"
+    >
+      <i class="fa fa-eye"></i>
+    </a>
+  {% endif %}
+</span>

@@ -1,0 +1,25 @@
+{% if product and product.mediaAdminItems is iterable %}
+  <div style="display:flex;gap:10px;flex-wrap:wrap;">
+    {% for m in product.mediaAdminItems %}
+      {% set url = m.url ?? '' %}
+      {% set kind = m.kind ?? 'image' %}
+      {% set id = m.id ?? 0 %}
+      {% if url is not empty and id %}
+        <div style="position:relative;width:72px;">
+          <a href="{{ url|e('html_attr') }}" target="_blank" rel="noreferrer">
+            {% if kind == 'video' %}
+              <div style="width:72px;height:72px;border-radius:12px;border:1px solid #d1d5db;background:#0b1220;color:#fff;display:grid;place-items:center;font-weight:900;">Video</div>
+            {% else %}
+              <img src="{{ url|e('html_attr') }}" alt="" style="width:72px;height:72px;object-fit:cover;border-radius:12px;border:1px solid #d1d5db;" loading="lazy" />
+            {% endif %}
+          </a>
+
+          <form method="post" action="{{ path('admin_product_media_inline_delete', { productId: product.id, mediaId: id }) }}" style="position:absolute;top:-8px;right:-8px;">
+            <input type="hidden" name="_token" value="{{ csrf_token('delete_media_' ~ id) }}" />
+            <button type="submit" title="Supprimer" style="width:22px;height:22px;border-radius:999px;border:1px solid #ef4444;background:#fff;color:#ef4444;font-weight:900;cursor:pointer;">×</button>
+          </form>
+        </div>
+      {% endif %}
+    {% endfor %}
+  </div>
+{% endif %}

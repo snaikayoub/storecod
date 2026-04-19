@@ -1,0 +1,65 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ product.title }} - StorePHP{% endblock %}
+
+{% block body %}
+  <a class="back" href="{{ path('shop') }}">← Retour boutique</a>
+
+  <div class="productpage">
+    <div class="productpage__media">
+      <div class="productpage__main">
+        <img id="mainImage" src="{{ images[0] }}" alt="{{ product.title }}" />
+      </div>
+      {% if images|length > 1 %}
+        <div class="thumbs">
+          {% for url in images %}
+            <button class="thumb" type="button" data-url="{{ url }}" onclick="document.getElementById('mainImage').src=this.dataset.url">
+              <img src="{{ url }}" alt="" />
+            </button>
+          {% endfor %}
+        </div>
+      {% endif %}
+    </div>
+
+    <div class="productpage__info">
+      <p class="kicker">{{ product.category }}</p>
+      <h1>{{ product.title }}</h1>
+      <div class="pricebig">{{ (product.priceSaleCents / 100)|number_format(2, '.', ' ') }} DH</div>
+
+      <div class="hero__actions">
+        <form method="post" action="{{ path('cart_add', { id: product.id }) }}" class="addtocart">
+          <input type="hidden" name="_token" value="{{ csrf_token('cart_add_' ~ product.id) }}" />
+
+          {% if product.variants is iterable and product.variants|length > 0 and product.variants[0] is string %}
+            <label class="field" style="margin: 0;">
+              <span class="field__label">Variante</span>
+              <select class="input" name="variant">
+                <option value="">Aucune</option>
+                {% for v in product.variants %}
+                  {% if v is string %}
+                    <option value="{{ v }}">{{ v }}</option>
+                  {% endif %}
+                {% endfor %}
+              </select>
+            </label>
+          {% endif %}
+
+          <button class="btn btn--primary" type="submit">Ajouter au panier</button>
+        </form>
+        <a class="btn" href="{{ path('cart') }}">Voir panier</a>
+      </div>
+
+      {% if product.variants %}
+        <div class="card">
+          <h3>Variantes</h3>
+          <pre class="code">{{ product.variants|json_encode(constant('JSON_PRETTY_PRINT')) }}</pre>
+        </div>
+      {% endif %}
+
+      <div class="card">
+        <h3>Description</h3>
+        <p class="muted">{{ product.description }}</p>
+      </div>
+    </div>
+  </div>
+{% endblock %}

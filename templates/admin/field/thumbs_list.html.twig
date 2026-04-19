@@ -1,0 +1,16 @@
+{% if field.value is iterable %}
+  <div style="display:flex;gap:6px;flex-wrap:wrap;max-width:180px;">
+    {% for url in field.value %}
+      {% if url is not empty %}
+        <a href="{{ url|e('html_attr') }}" target="_blank" rel="noreferrer">
+          <img
+            src="{{ url|e('html_attr') }}"
+            alt="thumb"
+            style="width:32px;height:32px;object-fit:cover;border-radius:8px;border:1px solid #d1d5db;"
+            loading="lazy"
+          />
+        </a>
+      {% endif %}
+    {% endfor %}
+  </div>
+{% endif %}

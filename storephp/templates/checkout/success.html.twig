@@ -1,0 +1,17 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Commande confirmee - StorePHP{% endblock %}
+
+{% block body %}
+  <section class="hero">
+    <div class="hero__card">
+      <p class="kicker">Merci</p>
+      <h1>Commande confirmee</h1>
+      <p class="muted">Votre commande <span class="mono">#{{ order.id }}</span> est enregistree.</p>
+      <div class="hero__actions">
+        <a class="btn btn--primary" href="{{ path('shop') }}">Retour boutique</a>
+        <a class="btn" href="{{ path('admin') }}">Voir dans l'admin</a>
+      </div>
+    </div>
+  </section>
+{% endblock %}

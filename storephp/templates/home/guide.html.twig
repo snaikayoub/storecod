@@ -1,0 +1,38 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Guide - StorePHP{% endblock %}
+
+{% block body %}
+  <section class="hero">
+    <div class="hero__card">
+      <p class="kicker">Guide de test</p>
+      <h1>StorePHP: boutique + admin + CSV + checkout</h1>
+      <p class="muted">Version Symfony 7 + MySQL (Docker). Cette page liste les etapes pour tester l'app.</p>
+      <div class="hero__actions">
+        <a class="btn btn--primary" href="{{ path('shop') }}">Ouvrir la boutique</a>
+        <a class="btn" href="{{ path('app_login') }}">Ouvrir l'admin</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="grid">
+    <div class="card">
+      <h3>Demarrage Docker</h3>
+      <pre class="code">docker compose -f compose.yaml up -d --build
+docker compose -f compose.yaml exec php composer install
+docker compose -f compose.yaml exec php php bin/console doctrine:migrations:migrate
+docker compose -f compose.yaml exec php php bin/console app:seed
+</pre>
+      <p class="muted">App: <span class="mono">http://localhost:8085</span> - phpMyAdmin: <span class="mono">http://localhost:8086</span></p>
+    </div>
+
+    <div class="card">
+      <h3>Parcours</h3>
+      <ol class="list">
+        <li>Ouvrir la boutique et consulter une fiche produit.</li>
+        <li>Ajouter un produit au panier, puis faire le checkout.</li>
+        <li>Ouvrir l'admin: commandes + export/import CSV.</li>
+      </ol>
+    </div>
+  </section>
+{% endblock %}

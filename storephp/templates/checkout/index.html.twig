@@ -1,0 +1,47 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Checkout - StorePHP{% endblock %}
+
+{% block body %}
+  <div class="pagehead">
+    <h1>Checkout</h1>
+    <p class="muted">Renseignez les informations de livraison.</p>
+  </div>
+
+  {% for message in app.flashes('error') %}
+    <div class="notice notice--error">{{ message }}</div>
+  {% endfor %}
+
+  <div class="card">
+    <form method="post" class="form">
+      <input type="hidden" name="_token" value="{{ csrf_token('checkout') }}" />
+
+      <label class="field">
+        <span class="field__label">Destinataire</span>
+        <input class="input" type="text" name="customerName" required />
+      </label>
+
+      <label class="field">
+        <span class="field__label">Telephone</span>
+        <input class="input" type="text" name="customerPhone" required />
+      </label>
+
+      <label class="field">
+        <span class="field__label">Ville</span>
+        <input class="input" type="text" name="customerCity" required />
+      </label>
+
+      <label class="field">
+        <span class="field__label">Adresse</span>
+        <textarea class="input" name="customerAddress" rows="3" required></textarea>
+      </label>
+
+      <label class="field">
+        <span class="field__label">Commentaire (optionnel)</span>
+        <textarea class="input" name="comment" rows="2"></textarea>
+      </label>
+
+      <button class="btn btn--primary" type="submit">Valider la commande</button>
+    </form>
+  </div>
+{% endblock %}

@@ -1,0 +1,48 @@
+<!doctype html>
+{% set isRtl = app.request.locale starts with 'ar' %}
+<html lang="{{ app.request.locale|default('fr') }}" dir="{{ isRtl ? 'rtl' : 'ltr' }}" class="{{ isRtl ? 'font-ar' : 'font-latin' }}">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{% block title %}StorePHP{% endblock %}</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300..900&family=Space+Grotesk:wght@300..700&display=swap" rel="stylesheet">
+    {% block stylesheets %}
+      <link rel="stylesheet" href="{{ asset('styles/app.css') }}" />
+    {% endblock %}
+    {% block javascripts %}
+      {{ importmap('app') }}
+    {% endblock %}
+  </head>
+  <body>
+    <header class="sticky top-0 z-40 border-b border-slate-200/70 bg-white/70 backdrop-blur-md">
+      <div class="mx-auto max-w-6xl px-4 py-3">
+        <div class="flex items-center justify-between gap-4">
+          <a class="font-extrabold tracking-tight text-slate-900" href="{{ path('home') }}">
+            <span class="bg-gradient-to-r from-cyan-500 via-emerald-500 to-amber-500 bg-clip-text text-transparent">StorePHP</span>
+          </a>
+
+          <div class="flex items-center gap-3">
+            <a class="text-sm font-bold text-slate-700 hover:text-slate-900" href="{{ path('home') }}">{{ isRtl ? 'المنتج' : 'Produit' }}</a>
+            {% if is_granted('ROLE_ADMIN') %}
+              <a class="text-sm font-bold text-slate-700 hover:text-slate-900" href="{{ path('admin') }}">Admin</a>
+              <a class="text-sm font-bold text-slate-700 hover:text-slate-900" href="{{ path('app_logout') }}">{{ isRtl ? 'خروج' : 'Logout' }}</a>
+            {% endif %}
+
+            <div class="h-5 w-px bg-slate-200"></div>
+            {% if isRtl %}
+              <a class="text-xs font-black tracking-wider text-slate-600 hover:text-slate-900" href="{{ path('set_locale', { _locale: 'fr' }) }}">FR</a>
+            {% else %}
+              <a class="text-xs font-black tracking-wider text-slate-600 hover:text-slate-900" href="{{ path('set_locale', { _locale: 'ar' }) }}">AR</a>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <main class="mx-auto max-w-6xl px-4 py-6">
+      {% block body %}{% endblock %}
+    </main>
+  </body>
+</html>

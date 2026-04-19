@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{% block title %}StorePHP{% endblock %}</title>
+    {% block stylesheets %}
+      <link rel="stylesheet" href="{{ asset('styles/app.css') }}" />
+    {% endblock %}
+    {% block javascripts %}
+      {{ importmap('app') }}
+    {% endblock %}
+  </head>
+  <body>
+    <header class="topbar">
+      <div class="container topbar__inner">
+        <a class="brand" href="{{ path('home') }}">StorePHP</a>
+        <nav class="nav">
+          <a class="nav__link" href="{{ path('home') }}">Guide</a>
+          <a class="nav__link" href="{{ path('shop') }}">Boutique</a>
+          <a class="nav__link" href="{{ path('cart') }}">
+            Panier
+            {% set c = cart_count() %}
+            {% if c > 0 %}<span class="badge">{{ c }}</span>{% endif %}
+          </a>
+          {% if is_granted('ROLE_ADMIN') %}
+            <a class="nav__link" href="{{ path('admin') }}">Admin</a>
+            <a class="nav__link" href="{{ path('app_logout') }}">Logout</a>
+          {% else %}
+            <a class="nav__link" href="{{ path('app_login') }}">Admin</a>
+          {% endif %}
+        </nav>
+      </div>
+    </header>
+
+    <main class="container">
+      {% block body %}{% endblock %}
+    </main>
+
+    <footer class="footer">
+      <div class="container footer__inner">
+        <span>StorePHP - Symfony 7 + MySQL</span>
+      </div>
+    </footer>
+  </body>
+</html>

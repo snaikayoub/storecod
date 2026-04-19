@@ -1,0 +1,36 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Connexion - StorePHP{% endblock %}
+
+{% block body %}
+  <section class="auth">
+    <div class="auth__card">
+      <p class="kicker">Admin</p>
+      <h1>Connexion</h1>
+
+      {% if error %}
+        <div class="notice notice--error">
+          {{ error.messageKey|trans(error.messageData, 'security') }}
+        </div>
+      {% endif %}
+
+      <form method="post" class="form">
+        <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}" />
+
+        <label class="field">
+          <span class="field__label">Email</span>
+          <input class="input" type="email" name="_username" value="{{ last_username }}" autocomplete="email" required />
+        </label>
+
+        <label class="field">
+          <span class="field__label">Mot de passe</span>
+          <input class="input" type="password" name="_password" autocomplete="current-password" required />
+        </label>
+
+        <button class="btn btn--primary" type="submit">Se connecter</button>
+      </form>
+
+      <p class="muted" style="margin-top: 12px;">Demo: <span class="mono">admin@storecod.local</span> / <span class="mono">cod</span></p>
+    </div>
+  </section>
+{% endblock %}

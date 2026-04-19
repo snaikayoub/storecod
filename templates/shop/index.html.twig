@@ -1,0 +1,45 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Boutique - StorePHP{% endblock %}
+
+{% block body %}
+  {% set isRtl = app.request.locale starts with 'ar' %}
+
+  {% for message in app.flashes('success') %}
+    <div class="mb-4 rounded-2xl border border-emerald-200 bg-emerald-50/70 px-4 py-3 text-sm font-semibold text-emerald-800">
+      {{ message }}
+    </div>
+  {% endfor %}
+
+  <div class="pagehead">
+    <h1>{{ isRtl ? 'المتجر' : 'Boutique' }}</h1>
+    <p class="muted">{{ isRtl ? 'جميع المنتجات المتوفرة.' : 'Catalogue des produits en ligne.' }}</p>
+  </div>
+
+  {% if products is empty %}
+    <div class="card">
+      <p class="muted">Aucun produit pour le moment.</p>
+    </div>
+  {% else %}
+    <div class="products">
+      {% for p in products %}
+        <div class="productcard">
+          <a class="product" href="{{ path('product_show', { slug: p.slug }) }}">
+            <div class="product__img">
+              <img src="{{ p.primaryImageUrl|default(p.referenceImageUrl) }}" alt="{{ p.title }}" />
+            </div>
+            <div class="product__body">
+              <h3>{{ p.title }}</h3>
+              {% set d = p.getDescriptionForLocale(app.request.locale) %}
+              <p class="muted line2">{{ d|striptags }}</p>
+              <div class="product__meta">
+                <span class="price">{{ (p.priceSaleCents / 100)|number_format(2, '.', ' ') }} DH</span>
+                <span class="pill">Ouvrir</span>
+              </div>
+            </div>
+          </a>
+        </div>
+      {% endfor %}
+    </div>
+  {% endif %}
+{% endblock %}

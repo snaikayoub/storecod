@@ -1,0 +1,26 @@
+{% extends '@EasyAdmin/page/content.html.twig' %}
+
+{% block content_title %}Import CSV{% endblock %}
+
+{% block main %}
+  {% for message in app.flashes('success') %}
+    <div class="alert alert-success">{{ message }}</div>
+  {% endfor %}
+  {% for message in app.flashes('error') %}
+    <div class="alert alert-danger">{{ message }}</div>
+  {% endfor %}
+
+  <div class="content-panel">
+    <div class="content-panel-body">
+      <p>Template attendu: <code>DESTINATAIRE, TELEPHONE, ADRESSE, PRIX, VILLE, COMMENTAIRE, PRODUIT 1, PRODUIT 2, ...</code></p>
+
+      <form method="post" enctype="multipart/form-data">
+        <div class="form-group">
+          <label class="form-control-label">Fichier CSV</label>
+          <input class="form-control" type="file" name="csv" accept=".csv,text/csv" required />
+        </div>
+        <button class="btn btn-primary" type="submit">Importer</button>
+      </form>
+    </div>
+  </div>
+{% endblock %}

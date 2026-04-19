@@ -1,0 +1,40 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Boutique - StorePHP{% endblock %}
+
+{% block body %}
+  <div class="pagehead">
+    <h1>Boutique</h1>
+    <p class="muted">Catalogue des produits en ligne.</p>
+  </div>
+
+  {% if products is empty %}
+    <div class="card">
+      <p class="muted">Aucun produit pour le moment.</p>
+    </div>
+  {% else %}
+    <div class="products">
+      {% for p in products %}
+        <div class="productcard">
+          <a class="product" href="{{ path('product_show', { slug: p.slug }) }}">
+            <div class="product__img">
+              <img src="{{ p.referenceImageUrl }}" alt="{{ p.title }}" />
+            </div>
+            <div class="product__body">
+              <h3>{{ p.title }}</h3>
+              <p class="muted line2">{{ p.description }}</p>
+              <div class="product__meta">
+                <span class="price">{{ (p.priceSaleCents / 100)|number_format(2, '.', ' ') }} DH</span>
+                <span class="pill">Ouvrir</span>
+              </div>
+            </div>
+          </a>
+          <form method="post" action="{{ path('cart_add', { id: p.id }) }}" class="productcard__cta">
+            <input type="hidden" name="_token" value="{{ csrf_token('cart_add_' ~ p.id) }}" />
+            <button class="btn" type="submit">Ajouter</button>
+          </form>
+        </div>
+      {% endfor %}
+    </div>
+  {% endif %}
+{% endblock %}

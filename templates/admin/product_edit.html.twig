@@ -1,0 +1,19 @@
+{% extends '@EasyAdmin/crud/edit.html.twig' %}
+
+{% block main %}
+  {% set product = entity.instance %}
+
+  {% if product and product.mediaAdminItems is defined and product.mediaAdminItems|length > 0 %}
+    <div class="content-panel">
+      <div class="content-panel-header">
+        <h2 class="title">Medias</h2>
+        <div class="subtitle">Supprimer une photo ou une video</div>
+      </div>
+      <div class="content-panel-body">
+        {% include 'admin/_product_media_manager_block.html.twig' with { product: product } %}
+      </div>
+    </div>
+  {% endif %}
+
+  {{ parent() }}
+{% endblock %}
