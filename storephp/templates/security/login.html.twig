@@ -14,17 +14,17 @@
         </div>
       {% endif %}
 
-      <form method="post" class="form">
+      <form method="post" class="form" autocomplete="off">
         <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}" />
 
         <label class="field">
           <span class="field__label">Email</span>
-          <input class="input" type="email" name="_username" value="{{ last_username }}" autocomplete="email" required />
+          <input class="input" type="email" name="_username" value="" autocomplete="off" required />
         </label>
 
         <label class="field">
           <span class="field__label">Mot de passe</span>
-          <input class="input" type="password" name="_password" autocomplete="current-password" required />
+          <input class="input" type="password" name="_password" autocomplete="new-password" required />
         </label>
 
         <button class="btn btn--primary" type="submit">Se connecter</button>

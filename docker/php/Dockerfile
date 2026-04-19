@@ -17,3 +17,8 @@ WORKDIR /var/www/html
 
 # PHP runtime overrides
 COPY docker/php/conf.d/*.ini /usr/local/etc/php/conf.d/
+
+COPY docker/php/entrypoint.sh /usr/local/bin/app-entrypoint
+RUN chmod +x /usr/local/bin/app-entrypoint
+
+ENTRYPOINT ["/usr/local/bin/app-entrypoint"]

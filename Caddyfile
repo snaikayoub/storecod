@@ -1,0 +1,8 @@
+www.storecod.org {
+    redir https://storecod.org{uri}
+}
+
+storecod.org {
+    encode gzip
+    reverse_proxy nginx:80
+}
