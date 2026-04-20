@@ -26,4 +26,10 @@ class HomeController extends AbstractController
             'products' => $products,
         ]);
     }
+
+    #[Route('/merci', name: 'thank_you')]
+    public function thankYou(): Response
+    {
+        return $this->render('thank_you.html.twig');
+    }
 }

@@ -98,6 +98,6 @@ class DirectOrderController extends AbstractController
 
         $isRtl = str_starts_with($request->getLocale(), 'ar');
         $this->addFlash('success', $isRtl ? 'تم تسجيل طلبك بنجاح. سنتواصل معك لتأكيد الطلب.' : 'Commande enregistree. Nous vous contacterons pour confirmer.');
-        return $this->redirectToRoute('shop');
+        return $this->redirectToRoute('thank_you');
     }
 }
