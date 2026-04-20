@@ -99,10 +99,10 @@
                   {% set v = first.url %}
                   {% if 'youtube.com' in v or 'youtu.be' in v %}
                     {% set src = v|replace({'watch?v=':'embed/','youtu.be/':'youtube.com/embed/'}) %}
-                    {% set src = src ~ ('?' in src ? '&' : '?') ~ 'autoplay=1&mute=0&playsinline=1' %}
+                    {% set src = src ~ ('?' in src ? '&' : '?') ~ 'autoplay=1&mute=1&playsinline=1' %}
                     <iframe class="block w-full bg-black" style="aspect-ratio: 16 / 9" src="{{ src }}" title="{{ t_video }}" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
                   {% else %}
-                    <video class="block w-full bg-black" style="aspect-ratio: 16 / 9" src="{{ v }}" autoplay controls playsinline preload="metadata"></video>
+                    <video class="block w-full bg-black" style="aspect-ratio: 16 / 9" src="{{ v }}" autoplay muted controls playsinline preload="metadata"></video>
                   {% endif %}
                 {% else %}
                   <img class="block w-full object-contain" style="aspect-ratio: 1 / 1" src="{{ first.url }}" alt="{{ product.title }}" />
@@ -309,53 +309,6 @@
   </section>
 
   <script>
-    window.__storeLpVideoSound = function(mainEl) {
-      var main = mainEl || document.getElementById('lpMainMedia') || document.getElementById('lpMain');
-      if (!main) return;
-      var video = main.querySelector('video');
-      if (!video) return;
-
-      function ensureButton() {
-        var existing = main.querySelector('[data-unmute-btn="1"]');
-        if (existing) return existing;
-        var btn = document.createElement('button');
-        btn.type = 'button';
-        btn.setAttribute('data-unmute-btn', '1');
-        btn.className = 'absolute bottom-3 left-3 inline-flex items-center gap-2 rounded-full bg-slate-900/70 px-3 py-2 text-xs font-black tracking-wide text-white shadow-lg backdrop-blur transition hover:bg-slate-900/80 focus:outline-none focus:ring-2 focus:ring-cyan-400/40';
-        btn.textContent = {{ isRtl ? '"تشغيل الصوت"' : '"ACTIVER LE SON"' }};
-        btn.addEventListener('click', function() {
-          try {
-            video.muted = false;
-            video.volume = 1;
-            var p = video.play();
-            if (p && typeof p.catch === 'function') p.catch(function() {});
-          } catch (e) {}
-          btn.remove();
-        });
-        main.appendChild(btn);
-        return btn;
-      }
-
-      // Try to start with sound. If the browser blocks it, fall back to muted autoplay and show an unmute button.
-      try {
-        video.muted = false;
-        video.volume = 1;
-        var playPromise = video.play();
-        if (playPromise && typeof playPromise.catch === 'function') {
-          playPromise.catch(function() {
-            try {
-              video.muted = true;
-              var p2 = video.play();
-              if (p2 && typeof p2.catch === 'function') p2.catch(function() {});
-            } catch (e) {}
-            ensureButton();
-          });
-        }
-      } catch (e) {
-        ensureButton();
-      }
-    };
-
     window.__storeLpSwap = function(btn) {
       var kind = btn.getAttribute('data-kind');
       var url = btn.getAttribute('data-url');
@@ -367,7 +320,7 @@
         var isYoutube = (url.indexOf('youtube.com') !== -1) || (url.indexOf('youtu.be') !== -1);
         if (isYoutube) {
           var src = url.replace('watch?v=', 'embed/').replace('youtu.be/', 'youtube.com/embed/');
-          src = src + (src.indexOf('?') !== -1 ? '&' : '?') + 'autoplay=1&mute=0&playsinline=1';
+          src = src + (src.indexOf('?') !== -1 ? '&' : '?') + 'autoplay=1&mute=1&playsinline=1';
           var iframe = document.createElement('iframe');
           iframe.className = 'block w-full bg-black';
           iframe.style.aspectRatio = '16 / 9';
@@ -382,12 +335,11 @@
           video.style.aspectRatio = '16 / 9';
           video.src = url;
           video.autoplay = true;
-          video.muted = false;
+          video.muted = true;
           video.controls = true;
           video.playsInline = true;
           video.preload = 'metadata';
           main.appendChild(video);
-          window.__storeLpVideoSound && window.__storeLpVideoSound(main);
         }
       } else {
         var img = document.createElement('img');
@@ -399,8 +351,20 @@
       }
     };
 
-    // Initial main video (if any)
-    window.__storeLpVideoSound && window.__storeLpVideoSound();
+    // Stop any playing media during navigation (Turbo or normal)
+    (function() {
+      function stopAllVideos() {
+        try {
+          document.querySelectorAll('video').forEach(function(v) {
+            try { v.pause(); } catch (e) {}
+          });
+        } catch (e) {}
+      }
+
+      window.addEventListener('pagehide', stopAllVideos);
+      document.addEventListener('turbo:before-visit', stopAllVideos);
+      document.addEventListener('turbo:before-cache', stopAllVideos);
+    })();
 
     (function() {
       var data = window.__storeVariants || [];
