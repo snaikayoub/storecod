@@ -21,6 +21,7 @@
   {% set t_picked = isRtl ? 'الاختيار' : 'Variante' %}
   {% set t_only_cod = isRtl ? 'الدفع عند الاستلام فقط.' : 'Paiement a la livraison uniquement.' %}
   {% set t_video = isRtl ? 'فيديو' : 'Video' %}
+  {% set t_free_shipping = isRtl ? 'توصيل مجاني' : 'LIVRAISON GRATUITE' %}
 
   {% for message in app.flashes('error') %}
     <div class="mb-4 rounded-2xl border border-red-200 bg-red-50/70 px-4 py-3 text-sm font-semibold text-red-800">
@@ -89,17 +90,17 @@
         <div class="lg:col-span-12">
           <div class="rounded-3xl border border-slate-200/80 bg-white/60 p-3 shadow-[0_18px_50px_rgba(15,23,42,0.08)] backdrop-blur">
             <div class="grid grid-cols-1 gap-3 md:grid-cols-2 md:items-start">
-              <div class="overflow-hidden rounded-2xl bg-slate-50" id="lpMain">
+              <div class="relative overflow-hidden rounded-2xl bg-slate-50" id="lpMain">
                 {% set first = gallery[0] ?? null %}
               {% if first %}
                 {% if first.kind is defined and first.kind == 'video' %}
                   {% set v = first.url %}
                   {% if 'youtube.com' in v or 'youtu.be' in v %}
                     {% set src = v|replace({'watch?v=':'embed/','youtu.be/':'youtube.com/embed/'}) %}
-                    {% set src = src ~ ('?' in src ? '&' : '?') ~ 'autoplay=1&mute=1&playsinline=1' %}
+                    {% set src = src ~ ('?' in src ? '&' : '?') ~ 'autoplay=1&mute=0&playsinline=1' %}
                     <iframe class="block w-full bg-black" style="aspect-ratio: 16 / 9" src="{{ src }}" title="{{ t_video }}" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
                   {% else %}
-                    <video class="block w-full bg-black" style="aspect-ratio: 16 / 9" src="{{ v }}" autoplay muted controls playsinline></video>
+                    <video class="block w-full bg-black" style="aspect-ratio: 16 / 9" src="{{ v }}" autoplay controls playsinline preload="metadata"></video>
                   {% endif %}
                 {% else %}
                   <img class="block w-full object-contain" style="aspect-ratio: 1 / 1" src="{{ first.url }}" alt="{{ product.title }}" />
@@ -193,9 +194,15 @@
                         </div>
                       </div>
                     </div>
-                    <div class="inline-flex items-center gap-2 rounded-full border border-amber-200 bg-amber-50/70 px-3 py-1 text-xs font-black tracking-wider text-amber-800">
-                      <span class="h-1.5 w-1.5 rounded-full bg-amber-500"></span>
-                      COD
+                    <div class="flex flex-wrap items-center justify-end gap-2">
+                      <div class="inline-flex items-center gap-2 rounded-full border border-amber-200 bg-amber-50/70 px-3 py-1 text-xs font-black tracking-wider text-amber-800">
+                        <span class="h-1.5 w-1.5 rounded-full bg-amber-500"></span>
+                        COD
+                      </div>
+                      <div class="inline-flex items-center gap-2 rounded-full border border-emerald-200 bg-emerald-50/70 px-3 py-1 text-xs font-black tracking-wider text-emerald-800">
+                        <span class="h-1.5 w-1.5 rounded-full bg-emerald-500"></span>
+                        {{ t_free_shipping }}
+                      </div>
                     </div>
                   </div>
 
@@ -288,6 +295,53 @@
   </section>
 
   <script>
+    window.__storeLpVideoSound = function(mainEl) {
+      var main = mainEl || document.getElementById('lpMain');
+      if (!main) return;
+      var video = main.querySelector('video');
+      if (!video) return;
+
+      function ensureButton() {
+        var existing = main.querySelector('[data-unmute-btn="1"]');
+        if (existing) return existing;
+        var btn = document.createElement('button');
+        btn.type = 'button';
+        btn.setAttribute('data-unmute-btn', '1');
+        btn.className = 'absolute bottom-3 left-3 inline-flex items-center gap-2 rounded-full bg-slate-900/70 px-3 py-2 text-xs font-black tracking-wide text-white shadow-lg backdrop-blur transition hover:bg-slate-900/80 focus:outline-none focus:ring-2 focus:ring-cyan-400/40';
+        btn.textContent = {{ isRtl ? '"تشغيل الصوت"' : '"ACTIVER LE SON"' }};
+        btn.addEventListener('click', function() {
+          try {
+            video.muted = false;
+            video.volume = 1;
+            var p = video.play();
+            if (p && typeof p.catch === 'function') p.catch(function() {});
+          } catch (e) {}
+          btn.remove();
+        });
+        main.appendChild(btn);
+        return btn;
+      }
+
+      // Try to start with sound. If the browser blocks it, fall back to muted autoplay and show an unmute button.
+      try {
+        video.muted = false;
+        video.volume = 1;
+        var playPromise = video.play();
+        if (playPromise && typeof playPromise.catch === 'function') {
+          playPromise.catch(function() {
+            try {
+              video.muted = true;
+              var p2 = video.play();
+              if (p2 && typeof p2.catch === 'function') p2.catch(function() {});
+            } catch (e) {}
+            ensureButton();
+          });
+        }
+      } catch (e) {
+        ensureButton();
+      }
+    };
+
     window.__storeLpSwap = function(btn) {
       var kind = btn.getAttribute('data-kind');
       var url = btn.getAttribute('data-url');
@@ -299,7 +353,7 @@
         var isYoutube = (url.indexOf('youtube.com') !== -1) || (url.indexOf('youtu.be') !== -1);
         if (isYoutube) {
           var src = url.replace('watch?v=', 'embed/').replace('youtu.be/', 'youtube.com/embed/');
-          src = src + (src.indexOf('?') !== -1 ? '&' : '?') + 'autoplay=1&mute=1&playsinline=1';
+          src = src + (src.indexOf('?') !== -1 ? '&' : '?') + 'autoplay=1&mute=0&playsinline=1';
           var iframe = document.createElement('iframe');
           iframe.className = 'block w-full bg-black';
           iframe.style.aspectRatio = '16 / 9';
@@ -314,10 +368,12 @@
           video.style.aspectRatio = '16 / 9';
           video.src = url;
           video.autoplay = true;
-          video.muted = true;
+          video.muted = false;
           video.controls = true;
           video.playsInline = true;
+          video.preload = 'metadata';
           main.appendChild(video);
+          window.__storeLpVideoSound && window.__storeLpVideoSound(main);
         }
       } else {
         var img = document.createElement('img');
@@ -328,6 +384,9 @@
         main.appendChild(img);
       }
     };
+
+    // Initial main video (if any)
+    window.__storeLpVideoSound && window.__storeLpVideoSound();
 
     (function() {
       var data = window.__storeVariants || [];
