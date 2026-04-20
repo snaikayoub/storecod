@@ -21,8 +21,6 @@
   {% set t_picked = isRtl ? 'الاختيار' : 'Variante' %}
   {% set t_only_cod = isRtl ? 'الدفع عند الاستلام فقط.' : 'Paiement a la livraison uniquement.' %}
   {% set t_video = isRtl ? 'فيديو' : 'Video' %}
-  {% set t_free_shipping = isRtl ? 'توصيل مجاني' : 'LIVRAISON GRATUITE' %}
-  {% set t_free_shipping_sub = isRtl ? 'في جميع أنحاء المغرب' : 'Partout au Maroc' %}
 
   {% for message in app.flashes('error') %}
     <div class="mb-4 rounded-2xl border border-red-200 bg-red-50/70 px-4 py-3 text-sm font-semibold text-red-800">
@@ -92,7 +90,6 @@
           <div class="rounded-3xl border border-slate-200/80 bg-white/60 p-3 shadow-[0_18px_50px_rgba(15,23,42,0.08)] backdrop-blur">
             <div class="grid grid-cols-1 gap-3 md:grid-cols-2 md:items-start">
               <div class="overflow-hidden rounded-2xl bg-slate-50" id="lpMain">
-                <div class="relative" id="lpMainMedia">
                 {% set first = gallery[0] ?? null %}
               {% if first %}
                 {% if first.kind is defined and first.kind == 'video' %}
@@ -102,7 +99,7 @@
                     {% set src = src ~ ('?' in src ? '&' : '?') ~ 'autoplay=1&mute=1&playsinline=1' %}
                     <iframe class="block w-full bg-black" style="aspect-ratio: 16 / 9" src="{{ src }}" title="{{ t_video }}" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
                   {% else %}
-                    <video class="block w-full bg-black" style="aspect-ratio: 16 / 9" src="{{ v }}" autoplay muted controls playsinline preload="metadata"></video>
+                    <video class="block w-full bg-black" style="aspect-ratio: 16 / 9" src="{{ v }}" autoplay muted controls playsinline></video>
                   {% endif %}
                 {% else %}
                   <img class="block w-full object-contain" style="aspect-ratio: 1 / 1" src="{{ first.url }}" alt="{{ product.title }}" />
@@ -112,24 +109,6 @@
                     <div class="text-sm font-bold">{{ isRtl ? 'لا توجد صور بعد' : 'Aucune image' }}</div>
                   </div>
                 {% endif %}
-                </div>
-
-                <div class="border-t border-slate-200/70 bg-white/70 px-4 py-3">
-                  <div class="flex items-center justify-between gap-3">
-                    <div class="flex items-center gap-3">
-                      <span class="inline-flex h-10 w-10 items-center justify-center rounded-2xl bg-gradient-to-br from-emerald-500 to-cyan-500 text-white shadow-[0_12px_30px_rgba(16,185,129,0.25)]">
-                        <svg viewBox="0 0 24 24" class="h-5 w-5" fill="currentColor" aria-hidden="true">
-                          <path d="M3 7a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v1h1.586a2 2 0 0 1 1.414.586l1.414 1.414A2 2 0 0 1 23 11.414V15a2 2 0 0 1-2 2h-1a3 3 0 0 1-6 0H10a3 3 0 0 1-6 0H3a2 2 0 0 1-2-2V7h2Zm2 0v8h.17a3.001 3.001 0 0 1 5.66 0H14.17a3.001 3.001 0 0 1 5.66 0H21v-3.586L19.586 10H17V7H5Zm2 10a1 1 0 1 0 2 0 1 1 0 0 0-2 0Zm12 0a1 1 0 1 0 2 0 1 1 0 0 0-2 0Z"></path>
-                        </svg>
-                      </span>
-                      <div class="min-w-0">
-                        <div class="text-base font-black tracking-tight text-emerald-800 {{ isRtl ? 'text-right' : '' }}">{{ t_free_shipping }}</div>
-                        <div class="text-xs font-extrabold tracking-wider text-slate-600 {{ isRtl ? 'text-right' : '' }}">{{ t_free_shipping_sub }}</div>
-                      </div>
-                    </div>
-
-                  </div>
-                </div>
               </div>
 
               {% if gallery|length > 1 %}
@@ -312,7 +291,7 @@
     window.__storeLpSwap = function(btn) {
       var kind = btn.getAttribute('data-kind');
       var url = btn.getAttribute('data-url');
-      var main = document.getElementById('lpMainMedia') || document.getElementById('lpMain');
+      var main = document.getElementById('lpMain');
       if (!main) return;
       main.innerHTML = '';
 
@@ -338,7 +317,6 @@
           video.muted = true;
           video.controls = true;
           video.playsInline = true;
-          video.preload = 'metadata';
           main.appendChild(video);
         }
       } else {
@@ -350,21 +328,6 @@
         main.appendChild(img);
       }
     };
-
-    // Stop any playing media during navigation (Turbo or normal)
-    (function() {
-      function stopAllVideos() {
-        try {
-          document.querySelectorAll('video').forEach(function(v) {
-            try { v.pause(); } catch (e) {}
-          });
-        } catch (e) {}
-      }
-
-      window.addEventListener('pagehide', stopAllVideos);
-      document.addEventListener('turbo:before-visit', stopAllVideos);
-      document.addEventListener('turbo:before-cache', stopAllVideos);
-    })();
 
     (function() {
       var data = window.__storeVariants || [];
