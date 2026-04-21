@@ -1,45 +1,143 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Boutique - StorePHP{% endblock %}
+{% block title %}{{ isRtl ? 'المتجر' : 'Boutique' }} - StorePHP{% endblock %}
 
 {% block body %}
   {% set isRtl = app.request.locale starts with 'ar' %}
 
   {% for message in app.flashes('success') %}
-    <div class="mb-4 rounded-2xl border border-emerald-200 bg-emerald-50/70 px-4 py-3 text-sm font-semibold text-emerald-800">
-      {{ message }}
+    <div class="mb-6 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 mt-4">
+      <div class="rounded-2xl border border-emerald-200 bg-emerald-50/90 px-6 py-4 text-sm font-semibold text-emerald-800 shadow-sm backdrop-blur">
+        {{ message }}
+      </div>
     </div>
   {% endfor %}
 
-  <div class="pagehead">
-    <h1>{{ isRtl ? 'المتجر' : 'Boutique' }}</h1>
-    <p class="muted">{{ isRtl ? 'جميع المنتجات المتوفرة.' : 'Catalogue des produits en ligne.' }}</p>
-  </div>
-
-  {% if products is empty %}
-    <div class="card">
-      <p class="muted">Aucun produit pour le moment.</p>
+  <!-- Hero Section -->
+  <section class="relative overflow-hidden bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 py-16 sm:py-20 lg:py-24">
+    <!-- Background Pattern -->
+    <div class="absolute inset-0 opacity-30">
+      <div class="absolute inset-0 bg-[url('data:image/svg+xml,%3Csvg width=\'60\' height=\'60\' viewBox=\'0 0 60 60\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cg fill=\'none\' fill-rule=\'evenodd\'%3E%3Cg fill=\'%239C92AC\' fill-opacity=\'0.15\'%3E%3Cpath d=\'M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z\'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E')]"></div>
     </div>
-  {% else %}
-    <div class="products">
-      {% for p in products %}
-        <div class="productcard">
-          <a class="product" href="{{ path('product_show', { slug: p.slug }) }}">
-            <div class="product__img">
-              <img src="{{ p.primaryImageUrl|default(p.referenceImageUrl) }}" alt="{{ p.title }}" />
-            </div>
-            <div class="product__body">
-              <h3>{{ p.title }}</h3>
-              {% set d = p.getDescriptionForLocale(app.request.locale) %}
-              <p class="muted line2">{{ d|striptags }}</p>
-              <div class="product__meta">
-                <span class="price">{{ (p.priceSaleCents / 100)|number_format(2, '.', ' ') }} DH</span>
-                <span class="pill">Ouvrir</span>
-              </div>
-            </div>
-          </a>
+    
+    <div class="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 text-center">
+      <h1 class="text-4xl sm:text-5xl lg:text-6xl font-black text-white tracking-tight mb-4">
+        {{ isRtl ? 'أفضل المنتجات' : 'Produits Premium' }}
+        <span class="block mt-2 bg-gradient-to-r from-cyan-400 via-emerald-400 to-amber-400 bg-clip-text text-transparent">
+          {{ isRtl ? 'بأفضل الأسعار' : 'aux meilleurs prix' }}
+        </span>
+      </h1>
+      <p class="text-lg sm:text-xl text-slate-300 max-w-2xl mx-auto mb-8">
+        {{ isRtl ? 'اكتشف تشكيلتنا الحصرية من المنتجات عالية الجودة. توصيل سريع ودفع عند الاستلام.' : 'Decouvrez notre collection exclusive de produits de qualite. Expedition rapide et paiement a la livraison.' }}
+      </p>
+      <div class="flex flex-wrap items-center justify-center gap-4">
+        <div class="flex items-center gap-2 px-4 py-2 bg-white/10 rounded-full text-white text-sm font-medium backdrop-blur">
+          <svg class="h-5 w-5 text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+          </svg>
+          {{ isRtl ? 'توصيل مجاني' : 'Livraison gratuite' }}
         </div>
-      {% endfor %}
+        <div class="flex items-center gap-2 px-4 py-2 bg-white/10 rounded-full text-white text-sm font-medium backdrop-blur">
+          <svg class="h-5 w-5 text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+          </svg>
+          {{ isRtl ? 'دفع عند الاستلام' : 'Paiement a la livraison' }}
+        </div>
+        <div class="flex items-center gap-2 px-4 py-2 bg-white/10 rounded-full text-white text-sm font-medium backdrop-blur">
+          <svg class="h-5 w-5 text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+          </svg>
+          {{ isRtl ? 'ضمان الجودة' : 'Garantie qualite' }}
+        </div>
+      </div>
     </div>
-  {% endif %}
+  </section>
+
+  <!-- Products Section -->
+  <section class="py-12 sm:py-16 lg:py-20">
+    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <!-- Section Header -->
+      <div class="flex items-center justify-between mb-8">
+        <div>
+          <h2 class="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight">
+            {{ isRtl ? 'منتجاتنا' : 'Nos Produits' }}
+          </h2>
+          <p class="text-slate-500 mt-1">
+            {{ products|length }} {{ isRtl ? 'منتج متوفر' : 'produit(s) disponible(s)' }}
+          </p>
+        </div>
+      </div>
+
+      {% if products is empty %}
+        <div class="text-center py-16">
+          <div class="mx-auto h-24 w-24 rounded-full bg-slate-100 flex items-center justify-center mb-4">
+            <svg class="h-12 w-12 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
+            </svg>
+          </div>
+          <p class="text-slate-500 text-lg">{{ isRtl ? 'لا توجد منتجات حالياً' : 'Aucun produit pour le moment.' }}</p>
+        </div>
+      {% else %}
+        <!-- Products Grid -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+          {% for p in products %}
+            <a href="{{ path('product_show', { slug: p.slug }) }}" class="group block">
+              <div class="bg-white rounded-3xl border border-slate-200 overflow-hidden shadow-sm hover:shadow-xl hover:shadow-slate-200/50 transition-all duration-300 hover:-translate-y-1">
+                <!-- Image -->
+                <div class="relative aspect-square overflow-hidden bg-slate-100">
+                  <img 
+                    src="{{ p.primaryImageUrl|default(p.referenceImageUrl) }}" 
+                    alt="{{ p.title }}"
+                    class="h-full w-full object-cover group-hover:scale-105 transition-transform duration-500"
+                    loading="lazy"
+                  />
+                  <!-- Sale Badge -->
+                  {% if p.priceBaseCents > 0 and p.priceBaseCents > p.priceSaleCents %}
+                    {% set discount = ((p.priceBaseCents - p.priceSaleCents) / p.priceBaseCents * 100)|round %}
+                    <div class="absolute top-3 left-3 px-3 py-1 bg-red-500 text-white text-xs font-bold rounded-full shadow-lg">
+                      -{{ discount }}%
+                    </div>
+                  {% endif %}
+                </div>
+
+                <!-- Content -->
+                <div class="p-5">
+                  <h3 class="font-bold text-slate-900 line-clamp-2 group-hover:text-cyan-600 transition-colors duration-200">
+                    {{ p.title }}
+                  </h3>
+                  
+                  {% set d = p.getDescriptionForLocale(app.request.locale) %}
+                  {% if d %}
+                    <p class="mt-2 text-sm text-slate-500 line-clamp-2">
+                      {{ d|striptags }}
+                    </p>
+                  {% endif %}
+
+                  <div class="mt-4 flex items-center justify-between">
+                    <div class="flex items-baseline gap-2">
+                      <span class="text-xl font-black text-slate-900">
+                        {{ (p.priceSaleCents / 100)|number_format(0, '.', ' ') }}
+                        <span class="text-sm font-bold text-slate-500">DH</span>
+                      </span>
+                      {% if p.priceBaseCents > 0 and p.priceBaseCents > p.priceSaleCents %}
+                        <span class="text-sm font-medium text-slate-400 line-through">
+                          {{ (p.priceBaseCents / 100)|number_format(0, '.', ' ') }} DH
+                        </span>
+                      {% endif %}
+                    </div>
+                    <span class="inline-flex items-center gap-1 px-3 py-1.5 bg-cyan-50 text-cyan-700 text-xs font-bold rounded-full group-hover:bg-cyan-600 group-hover:text-white transition-colors duration-200">
+                      {{ isRtl ? 'اطلب' : 'Commander' }}
+                      <svg class="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+                      </svg>
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </a>
+          {% endfor %}
+        </div>
+      {% endif %}
+    </div>
+  </section>
 {% endblock %}
