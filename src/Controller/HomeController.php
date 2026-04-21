@@ -38,16 +38,8 @@ class HomeController extends AbstractController
             throw $this->createNotFoundException('Commande introuvable.');
         }
 
-        $trackOrderId = (int) $request->getSession()->get('thank_you_track_order_id', 0);
-        $shouldTrack = $trackOrderId === $order->getId();
-
-        if ($shouldTrack) {
-            $request->getSession()->remove('thank_you_track_order_id');
-        }
-
         return $this->render('thank_you.html.twig', [
             'order' => $order,
-            'shouldTrackLead' => $shouldTrack,
         ]);
     }
 }

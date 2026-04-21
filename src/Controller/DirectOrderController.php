@@ -96,8 +96,6 @@ class DirectOrderController extends AbstractController
         $this->em->persist($order);
         $this->em->flush();
 
-        $request->getSession()->set('thank_you_track_order_id', $order->getId());
-
         $isRtl = str_starts_with($request->getLocale(), 'ar');
         $this->addFlash('success', $isRtl ? 'تم تسجيل طلبك بنجاح. سنتواصل معك لتأكيد الطلب.' : 'Commande enregistree. Nous vous contacterons pour confirmer.');
         return $this->redirectToRoute('thank_you', ['id' => $order->getId()]);

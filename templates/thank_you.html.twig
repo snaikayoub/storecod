@@ -3,6 +3,8 @@
 {% set isRtl = app.request.locale starts with 'ar' %}
 {% set firstItem = order.items|first %}
 {% set orderValue = (order.totalCents / 100)|number_format(2, '.', '') %}
+{% set productName = firstItem ? firstItem.titleSnapshot : 'Commande' %}
+{% set productId = firstItem and firstItem.product ? firstItem.product.id : order.id %}
 
 {% block title %}{{ isRtl ? 'شكرا لك' : 'Merci pour votre commande' }} - StorePHP{% endblock %}
 
@@ -44,13 +46,25 @@
     </a>
   </div>
 
-  {% if shouldTrackLead %}
-    <script>
-      fbq('track', 'Lead', {
-        content_name: {{ (firstItem ? firstItem.titleSnapshot : 'Commande COD')|json_encode|raw }},
+  <script>
+    (function() {
+      var trackKey = 'purchase_tracked_order_{{ order.id }}';
+      if (window.sessionStorage && window.sessionStorage.getItem(trackKey) === '1') {
+        return;
+      }
+
+      fbq('track', 'Purchase', {
+        content_name: {{ productName|json_encode|raw }},
+        content_ids: [{{ productId|json_encode|raw }}],
+        content_type: 'product',
+        num_items: {{ firstItem ? firstItem.quantity : 1 }},
         value: {{ orderValue }},
         currency: 'MAD'
       });
-    </script>
-  {% endif %}
+
+      if (window.sessionStorage) {
+        window.sessionStorage.setItem(trackKey, '1');
+      }
+    })();
+  </script>
 {% endblock %}
