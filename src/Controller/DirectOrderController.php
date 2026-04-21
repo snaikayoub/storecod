@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Controller;
 
 use App\Entity\Order;
@@ -36,13 +38,18 @@ class DirectOrderController extends AbstractController
             throw $this->createNotFoundException('Produit introuvable.');
         }
 
-        $name = trim((string) $request->request->get('name', ''));
-        $phone = trim((string) $request->request->get('phone', ''));
+        $name = mb_substr(strip_tags(trim((string) $request->request->get('name', ''))), 0, 100);
+        $phone = preg_replace('/[^0-9+]/', '', trim((string) $request->request->get('phone', '')));
         $email = trim((string) $request->request->get('email', ''));
-        $city = trim((string) $request->request->get('city', ''));
-        $address = trim((string) $request->request->get('address', ''));
-        $comment = trim((string) $request->request->get('comment', ''));
-        $comment = $comment !== '' ? $comment : null;
+        $city = mb_substr(strip_tags(trim((string) $request->request->get('city', ''))), 0, 100);
+        $address = strip_tags(trim((string) $request->request->get('address', '')));
+        $comment = mb_substr(strip_tags(trim((string) $request->request->get('comment', ''))), 0, 500);
+
+        if ($phone === '' || strlen($phone) < 8) {
+            $isRtl = str_starts_with($request->getLocale(), 'ar');
+            $this->addFlash('error', $isRtl ? 'رقم الهاتف غير صالح.' : 'Numero de telephone invalide.');
+            return $this->redirectToRoute('product_show', ['slug' => $product->getSlug()]);
+        }
 
         $email = $email !== '' ? $email : null;
         if ($email !== null && !filter_var($email, FILTER_VALIDATE_EMAIL)) {
@@ -51,11 +58,13 @@ class DirectOrderController extends AbstractController
             return $this->redirectToRoute('product_show', ['slug' => $product->getSlug()]);
         }
 
-        if ($name === '' || $phone === '' || $city === '' || $address === '') {
+        if ($name === '' || $city === '' || $address === '') {
             $isRtl = str_starts_with($request->getLocale(), 'ar');
             $this->addFlash('error', $isRtl ? 'يرجى ملء جميع الحقول المطلوبة.' : 'Veuillez remplir tous les champs obligatoires.');
             return $this->redirectToRoute('product_show', ['slug' => $product->getSlug()]);
         }
+
+        $comment = $comment !== '' ? $comment : null;
 
         $qty = (int) $request->request->get('qty', 1);
         $qty = max(1, min(20, $qty));
