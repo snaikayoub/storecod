@@ -8,7 +8,7 @@ framework:
     # Enable rate limiting
     rate_limiter:
         order_api:
-            strategy: fixed_window
+            policy: fixed_window
             limit: 10
             interval: '1 minute'
 
