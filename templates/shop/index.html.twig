@@ -14,36 +14,36 @@
   {% endfor %}
 
   <!-- Hero Section -->
-  <section class="relative overflow-hidden bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 py-16 sm:py-20 lg:py-24">
+  <section class="relative overflow-hidden bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 py-10 sm:py-12 lg:py-14">
     <!-- Background Pattern -->
     <div class="absolute inset-0 opacity-30">
       <div class="absolute inset-0 bg-[url('data:image/svg+xml,%3Csvg width=\'60\' height=\'60\' viewBox=\'0 0 60 60\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cg fill=\'none\' fill-rule=\'evenodd\'%3E%3Cg fill=\'%239C92AC\' fill-opacity=\'0.15\'%3E%3Cpath d=\'M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z\'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E')]"></div>
     </div>
     
-    <div class="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 text-center">
-      <h1 class="text-4xl sm:text-5xl lg:text-6xl font-black text-white tracking-tight mb-4">
+    <div class="relative mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 text-center">
+      <h1 class="text-3xl sm:text-4xl lg:text-5xl font-black text-white tracking-tight mb-3">
         {{ isRtl ? 'أفضل المنتجات' : 'Produits Premium' }}
         <span class="block mt-2 bg-gradient-to-r from-cyan-400 via-emerald-400 to-amber-400 bg-clip-text text-transparent">
           {{ isRtl ? 'بأفضل الأسعار' : 'aux meilleurs prix' }}
         </span>
       </h1>
-      <p class="text-lg sm:text-xl text-slate-300 max-w-2xl mx-auto mb-8">
+      <p class="text-base sm:text-lg text-slate-300 max-w-2xl mx-auto mb-6">
         {{ isRtl ? 'اكتشف تشكيلتنا الحصرية من المنتجات عالية الجودة. توصيل سريع ودفع عند الاستلام.' : 'Decouvrez notre collection exclusive de produits de qualite. Expedition rapide et paiement a la livraison.' }}
       </p>
-      <div class="flex flex-wrap items-center justify-center gap-4">
-        <div class="flex items-center gap-2 px-4 py-2 bg-white/10 rounded-full text-white text-sm font-medium backdrop-blur">
+      <div class="flex flex-wrap items-center justify-center gap-3">
+        <div class="flex items-center gap-2 px-3 py-1.5 bg-white/10 rounded-full text-white text-xs sm:text-sm font-medium backdrop-blur">
           <svg class="h-5 w-5 text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
             <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
           </svg>
           {{ isRtl ? 'توصيل مجاني' : 'Livraison gratuite' }}
         </div>
-        <div class="flex items-center gap-2 px-4 py-2 bg-white/10 rounded-full text-white text-sm font-medium backdrop-blur">
+        <div class="flex items-center gap-2 px-3 py-1.5 bg-white/10 rounded-full text-white text-xs sm:text-sm font-medium backdrop-blur">
           <svg class="h-5 w-5 text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
             <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
           </svg>
           {{ isRtl ? 'دفع عند الاستلام' : 'Paiement a la livraison' }}
         </div>
-        <div class="flex items-center gap-2 px-4 py-2 bg-white/10 rounded-full text-white text-sm font-medium backdrop-blur">
+        <div class="flex items-center gap-2 px-3 py-1.5 bg-white/10 rounded-full text-white text-xs sm:text-sm font-medium backdrop-blur">
           <svg class="h-5 w-5 text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
             <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
           </svg>
@@ -54,12 +54,12 @@
   </section>
 
   <!-- Products Section -->
-  <section class="py-12 sm:py-16 lg:py-20">
+  <section class="py-8 sm:py-10 lg:py-12">
     <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
       <!-- Section Header -->
-      <div class="flex items-center justify-between mb-8">
+      <div class="flex items-center justify-between mb-6">
         <div>
-          <h2 class="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight">
+          <h2 class="text-xl sm:text-2xl font-black text-slate-900 tracking-tight">
             {{ isRtl ? 'منتجاتنا' : 'Nos Produits' }}
           </h2>
           <p class="text-slate-500 mt-1">
@@ -79,9 +79,9 @@
         </div>
       {% else %}
         <!-- Products Grid -->
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+        <div class="flex flex-wrap justify-center gap-5">
           {% for p in products %}
-            <a href="{{ path('product_show', { slug: p.slug }) }}" class="group block">
+            <a href="{{ path('product_show', { slug: p.slug }) }}" class="group block w-full sm:w-[calc(50%-10px)] lg:w-[calc(33.333%-14px)] xl:w-[calc(25%-15px)] max-w-[320px]">
               <div class="bg-white rounded-3xl border border-slate-200 overflow-hidden shadow-sm hover:shadow-xl hover:shadow-slate-200/50 transition-all duration-300 hover:-translate-y-1">
                 <!-- Image -->
                 <div class="relative aspect-square overflow-hidden bg-slate-100">
@@ -101,31 +101,31 @@
                 </div>
 
                 <!-- Content -->
-                <div class="p-5">
-                  <h3 class="font-bold text-slate-900 line-clamp-2 group-hover:text-cyan-600 transition-colors duration-200">
+                <div class="p-4">
+                  <h3 class="text-sm sm:text-base font-bold text-slate-900 line-clamp-2 group-hover:text-cyan-600 transition-colors duration-200">
                     {{ p.title }}
                   </h3>
                   
                   {% set d = p.getDescriptionForLocale(app.request.locale) %}
                   {% if d %}
-                    <p class="mt-2 text-sm text-slate-500 line-clamp-2">
+                    <p class="mt-2 text-xs sm:text-sm text-slate-500 line-clamp-2">
                       {{ d|striptags }}
                     </p>
                   {% endif %}
 
-                  <div class="mt-4 flex items-center justify-between">
+                  <div class="mt-3 flex items-center justify-between gap-2">
                     <div class="flex items-baseline gap-2">
-                      <span class="text-xl font-black text-slate-900">
+                      <span class="text-lg sm:text-xl font-black text-slate-900">
                         {{ (p.priceSaleCents / 100)|number_format(0, '.', ' ') }}
                         <span class="text-sm font-bold text-slate-500">DH</span>
                       </span>
                       {% if p.priceBaseCents > 0 and p.priceBaseCents > p.priceSaleCents %}
-                        <span class="text-sm font-medium text-slate-400 line-through">
+                        <span class="text-xs sm:text-sm font-medium text-slate-400 line-through">
                           {{ (p.priceBaseCents / 100)|number_format(0, '.', ' ') }} DH
                         </span>
                       {% endif %}
                     </div>
-                    <span class="inline-flex items-center gap-1 px-3 py-1.5 bg-cyan-50 text-cyan-700 text-xs font-bold rounded-full group-hover:bg-cyan-600 group-hover:text-white transition-colors duration-200">
+                    <span class="inline-flex items-center gap-1 px-2.5 py-1.5 bg-cyan-50 text-cyan-700 text-[11px] sm:text-xs font-bold rounded-full group-hover:bg-cyan-600 group-hover:text-white transition-colors duration-200 whitespace-nowrap">
                       {{ isRtl ? 'اطلب' : 'Commander' }}
                       <svg class="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
