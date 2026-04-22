@@ -27,11 +27,11 @@ class SecurityHeadersSubscriber implements EventSubscriberInterface
 
         $cspDirectives = [
             "default-src 'self'",
-            "script-src 'self' 'nonce' https://connect.facebook.net",
+            "script-src 'self' 'unsafe-inline' https://connect.facebook.net https://static.cloudflareinsights.com",
             "frame-src 'self' https://www.facebook.com",
             "img-src 'self' data: https: blob:",
-            "connect-src 'self' https://connect.facebook.net",
-            "font-src 'self' https://fonts.gstatic.com",
+            "connect-src 'self' https://connect.facebook.net https://static.cloudflareinsights.com https://www.facebook.com",
+            "font-src 'self' https://fonts.gstatic.com data:",
             "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
         ];
 
