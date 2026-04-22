@@ -58,6 +58,7 @@
     },
     "scripts": {
         "auto-scripts": {
+            "tailwind:build --minify": "symfony-cmd",
             "cache:clear": "symfony-cmd",
             "assets:install %PUBLIC_DIR%": "symfony-cmd",
             "importmap:install": "symfony-cmd"
