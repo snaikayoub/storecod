@@ -37,34 +37,35 @@
       {{ importmap('app') }}
     {% endblock %}
   </head>
-  <body class="bg-slate-50 min-h-screen flex flex-col">
+  <body class="min-h-screen flex flex-col bg-[radial-gradient(circle_at_top,_rgba(34,211,238,0.18),_transparent_24%),radial-gradient(circle_at_80%_20%,_rgba(16,185,129,0.12),_transparent_18%),linear-gradient(180deg,_#f7fbff_0%,_#eef4ff_48%,_#f8fafc_100%)] text-slate-900">
+    <div aria-hidden="true" class="pointer-events-none fixed inset-x-0 top-0 z-0 h-40 bg-[linear-gradient(90deg,rgba(6,182,212,0.12),rgba(16,185,129,0.10),rgba(245,158,11,0.10))] blur-3xl"></div>
     <!-- Header -->
-    <header class="sticky top-0 z-50 bg-white/95 backdrop-blur-lg border-b border-slate-200/50 shadow-sm">
-      <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div class="flex h-14 items-center justify-between">
+    <header class="sticky top-0 z-50 border-b border-white/60 bg-white/78 backdrop-blur-xl shadow-[0_10px_30px_rgba(15,23,42,0.06)]">
+      <div class="mx-auto max-w-6xl px-4 sm:px-5 lg:px-6">
+        <div class="flex h-13 items-center justify-between gap-3 sm:h-14">
           <!-- Logo -->
-          <a href="{{ path('home') }}" class="flex items-center gap-2 group">
-            <div class="h-9 w-9 rounded-xl bg-gradient-to-br from-cyan-500 via-emerald-500 to-amber-500 flex items-center justify-center shadow-md group-hover:shadow-lg transition-shadow duration-300">
+          <a href="{{ path('home') }}" class="group flex items-center gap-2.5">
+            <div class="flex h-9 w-9 items-center justify-center rounded-2xl bg-gradient-to-br from-cyan-500 via-sky-500 to-emerald-500 shadow-[0_10px_20px_rgba(14,165,233,0.25)] transition-transform duration-300 group-hover:scale-105">
               <svg class="h-5 w-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
               </svg>
             </div>
-            <span class="text-lg font-black tracking-tight text-slate-900 hidden sm:block">
-              <span class="bg-gradient-to-r from-cyan-600 via-emerald-600 to-amber-600 bg-clip-text text-transparent">Store</span><span class="text-slate-900">PHP</span>
+            <span class="hidden text-base font-black tracking-tight text-slate-900 sm:block">
+              <span class="bg-gradient-to-r from-cyan-600 via-sky-600 to-emerald-600 bg-clip-text text-transparent">Store</span><span class="text-slate-900">PHP</span>
             </span>
           </a>
 
           <!-- Navigation -->
-          <nav class="hidden md:flex items-center gap-1">
-            <a href="{{ path('shop') }}" class="px-3 py-2 text-sm font-semibold text-slate-600 hover:text-slate-900 hover:bg-slate-100 rounded-xl transition-all duration-200">
+          <nav class="hidden items-center gap-1 md:flex">
+            <a href="{{ path('shop') }}" class="rounded-xl px-3 py-1.5 text-sm font-semibold text-slate-600 transition-all duration-200 hover:bg-slate-100 hover:text-slate-900">
               {{ isRtl ? 'المنتجات' : 'Produits' }}
             </a>
           </nav>
 
           <!-- Right Side -->
-          <div class="flex items-center gap-2">
+          <div class="flex items-center gap-1.5 sm:gap-2">
             <!-- Phone -->
-            <a href="tel:+212661234567" class="hidden lg:flex items-center gap-2 px-3 py-2 text-xs font-semibold text-emerald-600 hover:text-emerald-700 hover:bg-emerald-50 rounded-xl transition-all duration-200">
+            <a href="tel:+212661234567" class="hidden items-center gap-2 rounded-xl border border-emerald-100 bg-emerald-50/70 px-3 py-1.5 text-[11px] font-semibold text-emerald-700 transition-all duration-200 hover:border-emerald-200 hover:bg-emerald-50 xl:flex">
               <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
               </svg>
@@ -72,20 +73,20 @@
             </a>
 
             <!-- Language Switcher -->
-            <div class="h-6 w-px bg-slate-200 mx-1 hidden sm:block"></div>
+            <div class="mx-1 hidden h-5 w-px bg-slate-200 sm:block"></div>
             {% if isRtl %}
-              <a href="{{ path('set_locale', { _locale: 'fr' }) }}" class="px-3 py-1.5 text-xs font-bold tracking-wider text-slate-500 hover:text-cyan-600 hover:bg-cyan-50 rounded-lg transition-all duration-200">
+              <a href="{{ path('set_locale', { _locale: 'fr' }) }}" class="rounded-lg px-2.5 py-1.5 text-[11px] font-black tracking-[0.18em] text-slate-500 transition-all duration-200 hover:bg-cyan-50 hover:text-cyan-600">
                 FR
               </a>
             {% else %}
-              <a href="{{ path('set_locale', { _locale: 'ar' }) }}" class="px-3 py-1.5 text-xs font-bold tracking-wider text-slate-500 hover:text-cyan-600 hover:bg-cyan-50 rounded-lg transition-all duration-200">
+              <a href="{{ path('set_locale', { _locale: 'ar' }) }}" class="rounded-lg px-2.5 py-1.5 text-[11px] font-black tracking-[0.18em] text-slate-500 transition-all duration-200 hover:bg-cyan-50 hover:text-cyan-600">
                 AR
               </a>
             {% endif %}
 
             <!-- Admin -->
             {% if is_granted('ROLE_ADMIN') %}
-              <a href="{{ path('admin') }}" class="p-2 text-slate-500 hover:text-slate-900 hover:bg-slate-100 rounded-xl transition-all duration-200" title="Admin">
+              <a href="{{ path('admin') }}" class="rounded-xl p-2 text-slate-500 transition-all duration-200 hover:bg-slate-100 hover:text-slate-900" title="Admin">
                 <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                   <path stroke-linecap="round" stroke-linejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
                   <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
@@ -98,14 +99,14 @@
     </header>
 
     <!-- Main Content -->
-    <main class="flex-1">
+    <main class="relative z-10 flex-1 pb-8">
       {% block body %}{% endblock %}
     </main>
 
     <!-- Footer -->
-    <footer class="bg-slate-900 text-white mt-auto">
-      <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-10">
-        <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+    <footer class="mt-auto border-t border-slate-200/60 bg-slate-950 text-white">
+      <div class="mx-auto max-w-6xl px-4 py-8 sm:px-5 lg:px-6">
+        <div class="grid grid-cols-1 gap-6 md:grid-cols-4">
           <!-- Brand -->
           <div class="col-span-1 md:col-span-2">
             <div class="flex items-center gap-2 mb-4">
@@ -114,21 +115,21 @@
                   <path stroke-linecap="round" stroke-linejoin="round" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
                 </svg>
               </div>
-              <span class="text-xl font-black">
+              <span class="text-lg font-black">
                 <span class="bg-gradient-to-r from-cyan-400 via-emerald-400 to-amber-400 bg-clip-text text-transparent">Store</span><span class="text-white">PHP</span>
               </span>
             </div>
-            <p class="text-slate-400 text-sm leading-relaxed max-w-md">
+            <p class="max-w-md text-sm leading-relaxed text-slate-400">
               {{ isRtl ? 'متجر إلكتروني رائد للمنتجات عالية الجودة. توصيل سريع لجميع المدن المغربية.' : 'Boutique en ligne leader pour produits premium. Expedition rapide dans tout le Maroc.' }}
             </p>
           </div>
 
           <!-- Quick Links -->
           <div>
-            <h4 class="font-bold text-sm tracking-wider text-slate-300 mb-4 uppercase">
+            <h4 class="mb-3 text-xs font-black uppercase tracking-[0.2em] text-slate-300">
               {{ isRtl ? 'روابط سريعة' : 'Liens rapides' }}
             </h4>
-            <ul class="space-y-2">
+            <ul class="space-y-2.5">
               <li><a href="{{ path('shop') }}" class="text-slate-400 hover:text-white text-sm transition-colors duration-200">{{ isRtl ? 'المنتجات' : 'Produits' }}</a></li>
               <li><a href="#" class="text-slate-400 hover:text-white text-sm transition-colors duration-200">{{ isRtl ? 'من نحن' : 'A propos' }}</a></li>
               <li><a href="#" class="text-slate-400 hover:text-white text-sm transition-colors duration-200">{{ isRtl ? 'سياسة الخصوصية' : 'Politique de confidentialite' }}</a></li>
@@ -137,7 +138,7 @@
 
           <!-- Contact -->
           <div>
-            <h4 class="font-bold text-sm tracking-wider text-slate-300 mb-4 uppercase">
+            <h4 class="mb-3 text-xs font-black uppercase tracking-[0.2em] text-slate-300">
               {{ isRtl ? 'اتصل بنا' : 'Contact' }}
             </h4>
             <ul class="space-y-3">
@@ -164,8 +165,8 @@
           </div>
         </div>
 
-        <div class="border-t border-slate-800 mt-10 pt-8 flex flex-col sm:flex-row items-center justify-between gap-4">
-          <p class="text-slate-500 text-sm">
+        <div class="mt-8 flex flex-col items-center justify-between gap-4 border-t border-slate-800 pt-6 sm:flex-row">
+          <p class="text-xs text-slate-500 sm:text-sm">
             &copy; {{ 'now'|date('Y') }} StorePHP. {{ isRtl ? 'جميع الحقوق محفوظة.' : 'Tous droits reserves.' }}
           </p>
           <div class="flex items-center gap-4">

@@ -1,15 +1,15 @@
 @import "tailwindcss";
 
 :root {
-  --bg: #fbfbf7;
-  --bg2: #f2f6ff;
-  --surface: #ffffff;
-  --surface2: #f6f8ff;
+  --bg: #f4f8ff;
+  --bg2: #eef4ff;
+  --surface: rgba(255, 255, 255, 0.88);
+  --surface2: #f4f8ff;
   --text: #0f172a;
-  --muted: #475569;
-  --border: rgba(15, 23, 42, 0.12);
+  --muted: #516072;
+  --border: rgba(148, 163, 184, 0.22);
   --accent: #0ea5a4;
-  --accent2: #2563eb;
+  --accent2: #0284c7;
 }
 
 * { box-sizing: border-box; }
@@ -18,8 +18,8 @@ body {
   margin: 0;
   color: var(--text);
   background:
-    radial-gradient(900px 500px at 20% -10%, rgba(37, 99, 235, 0.10), transparent 60%),
-    radial-gradient(900px 500px at 80% 0%, rgba(14, 165, 164, 0.10), transparent 55%),
+    radial-gradient(900px 480px at 15% -10%, rgba(34, 211, 238, 0.14), transparent 55%),
+    radial-gradient(760px 420px at 85% 6%, rgba(16, 185, 129, 0.12), transparent 45%),
     linear-gradient(180deg, var(--bg), var(--bg2));
   font-family: inherit;
 }
@@ -34,7 +34,7 @@ html.font-ar body {
   font-family: "Cairo", ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, "Noto Sans Arabic", "Noto Sans", "Liberation Sans", sans-serif;
 }
 
-.container { max-width: 1100px; margin: 0 auto; padding: 24px; }
+.container { max-width: 1100px; margin: 0 auto; padding: 20px; }
 
 .topbar {
   position: sticky;
@@ -82,7 +82,7 @@ html.font-ar body {
 }
 
 .kicker { color: var(--accent); font-weight: 700; margin: 0 0 8px; }
-h1 { margin: 0; font-size: 40px; letter-spacing: -0.03em; }
+h1 { margin: 0; font-size: 34px; letter-spacing: -0.03em; }
 
 .muted { color: var(--muted); }
 .mono { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace; }
@@ -329,16 +329,16 @@ h1 { margin: 0; font-size: 40px; letter-spacing: -0.03em; }
 
 .lp-section { margin-top: 18px; }
 
-.auth { min-height: calc(100vh - 160px); display: grid; place-items: center; padding: 20px 0; }
-.auth__card { width: min(520px, 100%); background: rgba(255,255,255,0.75); border: 1px solid var(--border); border-radius: 22px; padding: 22px; box-shadow: 0 16px 38px rgba(0,0,0,0.06); }
+.auth { min-height: calc(100vh - 160px); display: grid; place-items: center; padding: 24px 0; }
+.auth__card { width: min(460px, 100%); background: rgba(255,255,255,0.82); border: 1px solid var(--border); border-radius: 28px; padding: 22px; box-shadow: 0 20px 50px rgba(148,163,184,0.16); }
 
-.form { display: grid; gap: 12px; margin-top: 12px; }
+.form { display: grid; gap: 12px; margin-top: 14px; }
 .field { display: grid; gap: 6px; }
 .field__label { font-weight: 800; font-size: 14px; color: var(--muted); }
 .input {
   width: 100%;
-  padding: 12px 12px;
-  border-radius: 14px;
+  padding: 11px 12px;
+  border-radius: 16px;
   border: 1px solid var(--border);
   background: var(--surface);
   font-size: 16px;

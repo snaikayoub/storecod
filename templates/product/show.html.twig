@@ -51,7 +51,7 @@
     {% set firstImageUrl = (gallery[0]).url %}
   {% endif %}
 
-  <section class="relative overflow-hidden">
+  <section class="relative overflow-hidden px-4 py-6 sm:px-5 lg:px-6 lg:py-8">
     <div aria-hidden="true" class="pointer-events-none absolute inset-0">
       <div class="absolute -top-28 left-[-8rem] h-80 w-80 rounded-full bg-cyan-400/15 blur-3xl"></div>
       <div class="absolute -top-16 right-[-10rem] h-96 w-96 rounded-full bg-emerald-400/12 blur-3xl"></div>
@@ -61,7 +61,7 @@
     <div class="relative">
       <div class="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
         <div class="max-w-3xl {{ isRtl ? 'text-right' : '' }}">
-          <div class="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white/70 px-3 py-1 text-xs font-black tracking-wider text-slate-700 backdrop-blur">
+          <div class="inline-flex items-center gap-2 rounded-full border border-white/70 bg-white/80 px-3 py-1 text-[11px] font-black tracking-[0.2em] text-slate-700 shadow-sm backdrop-blur">
             <span class="h-1.5 w-1.5 rounded-full bg-cyan-500 shadow-[0_0_0_4px_rgba(34,211,238,0.15)]"></span>
             {{ t_product }}
             {% if product.category %}
@@ -70,24 +70,24 @@
             {% endif %}
           </div>
 
-          <h1 class="mt-3 text-3xl font-black tracking-tight text-slate-900 sm:text-4xl">
+          <h1 class="mt-3 text-2xl font-black tracking-tight text-slate-900 sm:text-3xl lg:text-4xl">
             {{ product.title }}
           </h1>
 
-          <p class="mt-2 text-sm font-semibold text-slate-600">
+          <p class="mt-2 max-w-2xl text-sm leading-6 text-slate-600 sm:text-[15px]">
             {{ isRtl ? 'تصميم مستقبلي. توصيل سريع. دفع عند الاستلام.' : 'Futuriste, propre, et rapide. Paiement a la livraison.' }}
           </p>
         </div>
 
-        <a href="#order" class="inline-flex items-center justify-center rounded-2xl border border-slate-200 bg-white/70 px-4 py-3 text-sm font-black text-slate-900 shadow-sm backdrop-blur transition hover:border-cyan-300 hover:shadow-[0_12px_30px_rgba(2,132,199,0.12)]">
+        <a href="#order" class="inline-flex items-center justify-center rounded-2xl border border-cyan-200 bg-white/85 px-4 py-2.5 text-sm font-black text-slate-900 shadow-[0_12px_28px_rgba(14,165,233,0.10)] backdrop-blur transition hover:border-cyan-300 hover:shadow-[0_16px_34px_rgba(2,132,199,0.16)]">
           {{ t_order }}
           <span class="{{ isRtl ? 'mr-2' : 'ml-2' }} inline-flex h-6 w-6 items-center justify-center rounded-full bg-cyan-500/15 text-cyan-700">↓</span>
         </a>
       </div>
 
-      <div class="mt-6 grid grid-cols-1 gap-6 lg:grid-cols-12">
+      <div class="mt-5 grid grid-cols-1 gap-5 lg:grid-cols-12">
         <div class="lg:col-span-12">
-          <div class="rounded-3xl border border-slate-200/80 bg-white/60 p-3 shadow-[0_18px_50px_rgba(15,23,42,0.08)] backdrop-blur">
+          <div class="rounded-[28px] border border-white/70 bg-white/82 p-3 shadow-[0_18px_50px_rgba(15,23,42,0.08)] backdrop-blur">
             <div class="grid grid-cols-1 gap-3 md:grid-cols-2 md:items-start">
               <div class="overflow-hidden rounded-2xl bg-slate-50" id="lpMain">
                 {% set first = gallery[0] ?? null %}
@@ -112,7 +112,7 @@
               </div>
 
               {% if gallery|length > 1 %}
-                <div class="rounded-2xl border border-slate-200 bg-white/70 p-2 shadow-sm">
+                <div class="rounded-2xl border border-slate-200/80 bg-white/80 p-2 shadow-sm">
                   <div class="flex flex-wrap content-start gap-2 overflow-y-auto pr-1" style="max-height: 520px">
                     {% for item in gallery %}
                       {% set isVideo = item.kind is defined and item.kind == 'video' %}
@@ -141,8 +141,8 @@
             </div>
           </div>
 
-          <div class="mt-5 flex flex-row gap-2 overflow-hidden">
-            <div class="flex flex-col rounded-2xl border border-emerald-200 bg-white px-3 py-2 shadow-sm flex-1 min-w-0">
+          <div class="mt-4 flex flex-row gap-2 overflow-hidden rounded-[26px] border border-white/60 bg-white/72 p-2 shadow-[0_12px_30px_rgba(148,163,184,0.12)] backdrop-blur">
+            <div class="flex min-w-0 flex-1 flex-col rounded-2xl border border-emerald-200/80 bg-emerald-50/70 px-3 py-2 shadow-sm">
               <div class="flex items-center gap-2">
                 <span class="inline-flex h-8 w-8 items-center justify-center rounded-xl bg-emerald-100 text-emerald-600">
                   <svg viewBox="0 0 24 24" class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
@@ -153,7 +153,7 @@
               </div>
               <div class="mt-1 text-[10px] text-slate-500 leading-tight">{{ isRtl ? 'ادفع عند الوصول' : 'Paiement a reception' }}</div>
             </div>
-            <div class="flex flex-col rounded-2xl border border-cyan-200 bg-white px-3 py-2 shadow-sm flex-1 min-w-0">
+            <div class="flex min-w-0 flex-1 flex-col rounded-2xl border border-cyan-200/80 bg-cyan-50/70 px-3 py-2 shadow-sm">
               <div class="flex items-center gap-2">
                 <span class="inline-flex h-8 w-8 items-center justify-center rounded-xl bg-cyan-100 text-cyan-600">
                   <svg viewBox="0 0 24 24" class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
@@ -164,7 +164,7 @@
               </div>
               <div class="mt-1 text-[10px] text-slate-500 leading-tight">{{ isRtl ? 'نتواصل معك سريعا' : 'Appel rapide' }}</div>
             </div>
-            <div class="flex flex-col rounded-2xl border border-amber-200 bg-white px-3 py-2 shadow-sm flex-1 min-w-0">
+            <div class="flex min-w-0 flex-1 flex-col rounded-2xl border border-amber-200/80 bg-amber-50/70 px-3 py-2 shadow-sm">
               <div class="flex items-center gap-2">
                 <span class="inline-flex h-8 w-8 items-center justify-center rounded-xl bg-amber-100 text-amber-600">
                   <svg viewBox="0 0 24 24" class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
@@ -180,12 +180,12 @@
         </div>
 
         <div class="lg:col-span-12">
-          <div class="flex flex-col gap-6 lg:flex-row lg:items-start">
+          <div class="flex flex-col gap-5 lg:flex-row lg:items-start">
             <div class="min-w-0 flex-1">
-              <div class="rounded-3xl border border-slate-200/80 bg-white/60 p-5 shadow-sm backdrop-blur">
+              <div class="rounded-[28px] border border-white/70 bg-white/82 p-5 shadow-[0_16px_40px_rgba(148,163,184,0.12)] backdrop-blur">
                 <div class="flex items-center justify-between gap-3">
                   <h2 class="text-base font-black tracking-tight text-slate-900 {{ isRtl ? 'text-right' : '' }}">{{ t_description }}</h2>
-                  <span class="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white/70 px-3 py-1 text-xs font-black text-slate-700">
+                    <span class="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-slate-50/80 px-3 py-1 text-[11px] font-black tracking-[0.18em] text-slate-700">
                     <span class="h-1.5 w-1.5 rounded-full bg-emerald-500"></span>
                     {{ isRtl ? 'أصلي' : 'Original' }}
                   </span>
@@ -200,12 +200,12 @@
               </div>
             </div>
 
-            <div class="w-full shrink-0 lg:w-[520px] xl:w-[560px]">
+             <div class="w-full shrink-0 lg:w-[460px] xl:w-[500px]">
               <div class="space-y-4 lg:sticky lg:top-24">
-                <div id="order" class="min-w-0 rounded-3xl border border-slate-200/80 bg-white/70 p-4 shadow-[0_18px_55px_rgba(15,23,42,0.10)] backdrop-blur">
+                <div id="order" class="min-w-0 rounded-[28px] border border-white/70 bg-white/86 p-4 shadow-[0_22px_60px_rgba(15,23,42,0.10)] backdrop-blur">
                   <div class="flex items-start justify-between gap-3">
                     <div class="{{ isRtl ? 'text-right' : '' }}">
-                      <div class="text-xs font-black tracking-wider text-slate-500">{{ t_price }}</div>
+                      <div class="text-[11px] font-black tracking-[0.18em] text-slate-500">{{ t_price }}</div>
                       {% set baseCents = product.priceBaseCents ?? 0 %}
                       {% set saleCents = product.priceSaleCents ?? 0 %}
                       <div class="mt-1 flex items-baseline gap-3">
@@ -214,18 +214,18 @@
                             {{ (baseCents / 100)|number_format(0, '.', ' ') }} Dhs
                           </div>
                         {% endif %}
-                        <div class="text-2xl font-black tracking-tight text-emerald-700">
+                        <div class="text-xl font-black tracking-tight text-emerald-700 sm:text-2xl">
                           {{ (saleCents / 100)|number_format(0, '.', ' ') }} <span class="text-base font-extrabold text-slate-500">Dhs</span>
                         </div>
                       </div>
                     </div>
-                    <div class="inline-flex items-center gap-2 rounded-full border border-amber-200 bg-amber-50/70 px-3 py-1 text-xs font-black tracking-wider text-amber-800">
+                     <div class="inline-flex items-center gap-2 rounded-full border border-amber-200 bg-amber-50/80 px-3 py-1 text-[11px] font-black tracking-[0.18em] text-amber-800">
                       <span class="h-1.5 w-1.5 rounded-full bg-amber-500"></span>
                       COD
                     </div>
                   </div>
 
-              <form method="post" action="{{ path('order_create', { id: product.id }) }}" class="mt-4 grid min-w-0 gap-3" id="orderForm">
+              <form method="post" action="{{ path('order_create', { id: product.id }) }}" class="mt-4 grid min-w-0 gap-2.5" id="orderForm">
                 <input type="hidden" name="_token" value="{{ csrf_token('order_create_' ~ product.id) }}" />
 
                 {% if variants is defined and variants|length > 0 %}
@@ -247,14 +247,14 @@
 
                   <input type="hidden" name="variantId" value="" id="variantIdInput" />
 
-                  <div class="grid min-w-0 grid-cols-2 gap-3">
+                  <div class="grid min-w-0 grid-cols-2 gap-2.5">
                     <label class="grid gap-1">
                       <span class="text-xs font-black tracking-wider text-slate-600">{{ t_size }}</span>
-                      <select class="w-full rounded-2xl border border-slate-200 bg-white/70 px-3 py-2.5 text-sm font-bold text-slate-900 shadow-sm focus:outline-none focus:ring-2 focus:ring-cyan-400/35" id="sizeSelect"></select>
+                       <select class="w-full rounded-2xl border border-slate-200 bg-white/80 px-3 py-2.5 text-sm font-bold text-slate-900 shadow-sm focus:outline-none focus:ring-2 focus:ring-cyan-400/35" id="sizeSelect"></select>
                     </label>
                     <label class="grid gap-1">
                       <span class="text-xs font-black tracking-wider text-slate-600">{{ t_color }}</span>
-                      <select class="w-full rounded-2xl border border-slate-200 bg-white/70 px-3 py-2.5 text-sm font-bold text-slate-900 shadow-sm focus:outline-none focus:ring-2 focus:ring-cyan-400/35" id="colorSelect"></select>
+                       <select class="w-full rounded-2xl border border-slate-200 bg-white/80 px-3 py-2.5 text-sm font-bold text-slate-900 shadow-sm focus:outline-none focus:ring-2 focus:ring-cyan-400/35" id="colorSelect"></select>
                     </label>
                   </div>
 
@@ -265,37 +265,37 @@
 
                 <label class="grid gap-1">
                   <span class="text-xs font-black tracking-wider text-slate-600">{{ t_name }}</span>
-                  <input class="w-full rounded-2xl border border-slate-200 bg-white/70 px-3 py-2.5 text-sm font-bold text-slate-900 shadow-sm placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-cyan-400/35" type="text" name="name" required />
+                   <input class="w-full rounded-2xl border border-slate-200 bg-white/80 px-3 py-2.5 text-sm font-bold text-slate-900 shadow-sm placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-cyan-400/35" type="text" name="name" required />
                 </label>
 
                 <label class="grid gap-1">
                   <span class="text-xs font-black tracking-wider text-slate-600">{{ t_phone }}</span>
-                  <input class="w-full rounded-2xl border border-slate-200 bg-white/70 px-3 py-2.5 text-sm font-bold text-slate-900 shadow-sm placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-cyan-400/35" type="text" name="phone" required />
+                   <input class="w-full rounded-2xl border border-slate-200 bg-white/80 px-3 py-2.5 text-sm font-bold text-slate-900 shadow-sm placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-cyan-400/35" type="text" name="phone" required />
                 </label>
 
                 <label class="grid gap-1">
                   <span class="text-xs font-black tracking-wider text-slate-600">Email (optionnel)</span>
-                  <input class="w-full rounded-2xl border border-slate-200 bg-white/70 px-3 py-2.5 text-sm font-bold text-slate-900 shadow-sm placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-cyan-400/35" type="email" name="email" />
+                   <input class="w-full rounded-2xl border border-slate-200 bg-white/80 px-3 py-2.5 text-sm font-bold text-slate-900 shadow-sm placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-cyan-400/35" type="email" name="email" />
                 </label>
 
                 <label class="grid gap-1">
                   <span class="text-xs font-black tracking-wider text-slate-600">{{ t_city }}</span>
-                  <input class="w-full rounded-2xl border border-slate-200 bg-white/70 px-3 py-2.5 text-sm font-bold text-slate-900 shadow-sm placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-cyan-400/35" type="text" name="city" required />
+                   <input class="w-full rounded-2xl border border-slate-200 bg-white/80 px-3 py-2.5 text-sm font-bold text-slate-900 shadow-sm placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-cyan-400/35" type="text" name="city" required />
                 </label>
 
                 <label class="grid gap-1">
                   <span class="text-xs font-black tracking-wider text-slate-600">{{ t_address }}</span>
-                  <textarea class="w-full resize-y rounded-2xl border border-slate-200 bg-white/70 px-3 py-2.5 text-sm font-bold text-slate-900 shadow-sm placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-cyan-400/35" style="max-height: 140px" name="address" rows="2" required></textarea>
+                   <textarea class="w-full resize-y rounded-2xl border border-slate-200 bg-white/80 px-3 py-2.5 text-sm font-bold text-slate-900 shadow-sm placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-cyan-400/35" style="max-height: 140px" name="address" rows="2" required></textarea>
                 </label>
 
-                <div class="grid min-w-0 grid-cols-[140px_1fr] items-end gap-3">
+                <div class="grid min-w-0 grid-cols-[110px_1fr] items-end gap-2.5">
                   <label class="grid gap-1">
                     <span class="text-xs font-black tracking-wider text-slate-600">{{ t_qty }}</span>
-                    <input class="h-11 w-full rounded-2xl border border-slate-200 bg-white/70 px-3 py-0 text-sm font-bold text-slate-900 shadow-sm focus:outline-none focus:ring-2 focus:ring-cyan-400/35" type="number" name="qty" min="1" max="20" value="1" />
+                     <input class="h-11 w-full rounded-2xl border border-slate-200 bg-white/80 px-3 py-0 text-sm font-bold text-slate-900 shadow-sm focus:outline-none focus:ring-2 focus:ring-cyan-400/35" type="number" name="qty" min="1" max="20" value="1" />
                   </label>
 
                   <div class="flex justify-center">
-                    <button class="inline-flex h-11 w-full max-w-[360px] items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-cyan-600 via-emerald-600 to-amber-500 px-4 text-sm font-black tracking-wide text-white shadow-[0_18px_40px_rgba(6,182,212,0.20)] transition hover:brightness-[0.98] focus:outline-none focus:ring-2 focus:ring-cyan-400/40" type="submit">
+                     <button class="inline-flex h-11 w-full max-w-[360px] items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-cyan-600 via-sky-600 to-emerald-500 px-4 text-sm font-black tracking-wide text-white shadow-[0_18px_40px_rgba(6,182,212,0.20)] transition hover:brightness-[0.98] focus:outline-none focus:ring-2 focus:ring-cyan-400/40" type="submit">
                       {{ t_confirm }}
                       <span class="inline-flex h-7 w-7 items-center justify-center rounded-full bg-white/15 ring-1 ring-white/20">{{ isRtl ? '←' : '→' }}</span>
                     </button>

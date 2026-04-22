@@ -3,10 +3,11 @@
 {% block title %}Connexion - StorePHP{% endblock %}
 
 {% block body %}
-  <section class="auth">
-    <div class="auth__card">
-      <p class="kicker">Admin</p>
-      <h1>Connexion</h1>
+  <section class="auth px-4 sm:px-5 lg:px-6">
+    <div class="auth__card border border-white/70 bg-white/82 shadow-[0_20px_60px_rgba(148,163,184,0.16)] backdrop-blur">
+      <p class="kicker text-[11px] tracking-[0.2em]">Admin</p>
+      <h1 class="text-3xl font-black tracking-tight text-slate-900">Connexion</h1>
+      <p class="mt-2 text-sm text-slate-500">Acces securise au tableau de bord StorePHP.</p>
 
       {% if error %}
         <div class="notice notice--error">
@@ -27,7 +28,7 @@
           <input class="input" type="password" name="_password" autocomplete="new-password" required />
         </label>
 
-        <button class="btn btn--primary" type="submit">Se connecter</button>
+        <button class="btn btn--primary rounded-2xl bg-gradient-to-r from-cyan-600 via-sky-600 to-emerald-500 shadow-[0_14px_30px_rgba(14,165,233,0.18)]" type="submit">Se connecter</button>
       </form>
     </div>
   </section>
